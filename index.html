@@ -3,1159 +3,557 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CSC Admin — Panel de Solicitudes</title>
+<title>CSC Admin — Prototipo Funcional</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg-page:      #f4f5f7;
-    --bg-sidebar:   #1a1d27;
-    --bg-card:      #ffffff;
-    --bg-card-2:    #f8f9fb;
-    --bg-hover:     #f1f3f7;
-    --border:       rgba(0,0,0,0.07);
-    --border-md:    rgba(0,0,0,0.13);
-    --text-primary: #111827;
-    --text-secondary:#4b5563;
-    --text-muted:   #9ca3af;
-    --accent:       #4f7bff;
-    --accent-glow:  rgba(79,123,255,0.10);
-    --amber:        #d97706;
-    --amber-bg:     rgba(217,119,6,0.10);
-    --green:        #16a34a;
-    --green-bg:     rgba(22,163,74,0.10);
-    --red:          #dc2626;
-    --red-bg:       rgba(220,38,38,0.10);
-    --blue:         #2563eb;
-    --blue-bg:      rgba(37,99,235,0.10);
-    --purple:       #7c3aed;
-    --purple-bg:    rgba(124,58,237,0.10);
-    --sidebar-w:    220px;
-    --header-h:     64px;
-  }
-
-  html { background: var(--bg-page); }
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg-page);
-    color: var(--text-primary);
-    min-height: 100vh;
-    display: flex;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* ── SIDEBAR ── */
-  .sidebar {
-    width: var(--sidebar-w);
-    min-height: 100vh;
-    background: var(--bg-sidebar);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0; left: 0; bottom: 0;
-    z-index: 100;
-  }
-  .sidebar-brand {
-    padding: 20px 20px 16px;
-    border-bottom: 1px solid var(--border);
-  }
-  .brand-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--accent-glow);
-    border: 1px solid rgba(79,123,255,0.25);
-    border-radius: 8px;
-    padding: 6px 10px;
-    margin-bottom: 10px;
-  }
-  .brand-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 8px var(--accent);
-    animation: pulse 2.5s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%,100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-  .brand-badge span { font-size: 11px; font-weight: 500; color: var(--accent); letter-spacing: 0.04em; }
-  .brand-name { font-size: 16px; font-weight: 600; color: var(--text-primary); }
-  .brand-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-
-  .nav-section-label {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    padding: 16px 20px 6px;
-  }
-  .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 20px;
-    font-size: 13px;
-    color: var(--text-secondary);
-    cursor: pointer;
-    border-radius: 0;
-    transition: all 0.15s;
-    position: relative;
-  }
-  .nav-item:hover { background: var(--bg-hover); color: var(--text-primary); }
-  .nav-item.active {
-    background: var(--accent-glow);
-    color: var(--text-primary);
-    border-right: 2px solid var(--accent);
-  }
-  .nav-item.active .nav-icon { color: var(--accent); }
-  .nav-icon { width: 16px; height: 16px; flex-shrink: 0; }
-  .nav-badge {
-    margin-left: auto;
-    background: var(--amber);
-    color: #000;
-    font-size: 10px;
-    font-weight: 600;
-    border-radius: 99px;
-    padding: 1px 7px;
-    min-width: 18px;
-    text-align: center;
-  }
-  .nav-badge.blue { background: var(--accent); color: #fff; }
-
-  .sidebar-footer {
-    margin-top: auto;
-    padding: 16px 20px;
-    border-top: 1px solid var(--border);
-  }
-  .footer-email { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; font-family: 'DM Mono', monospace; }
-  .logout {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 12px; color: var(--text-muted);
-    cursor: pointer; transition: color 0.15s;
-  }
-  .logout:hover { color: var(--red); }
-
-  /* ── MAIN ── */
-  .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
-
-  /* ── TOPBAR ── */
-  .topbar {
-    height: var(--header-h);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    padding: 0 28px;
-    gap: 16px;
-    position: sticky; top: 0;
-    background: var(--bg-card);
-    z-index: 50;
-    box-shadow: 0 1px 0 var(--border);
-  }
-  .topbar-title { font-size: 16px; font-weight: 500; }
-  .topbar-sep { width: 1px; height: 20px; background: var(--border-md); }
-  .topbar-sub { font-size: 13px; color: var(--text-muted); }
-  .topbar-actions { margin-left: auto; display: flex; gap: 8px; }
-
-  /* ── DESCRIPTION BANNER ── */
-  .desc-banner {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
-    border-radius: 10px;
-    padding: 16px 20px;
-    margin: 24px 28px 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-  }
-  .desc-section h4 {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 6px;
-  }
-  .desc-section p {
-    font-size: 12px;
-    color: var(--text-secondary);
-    line-height: 1.6;
-  }
-  .desc-section .route {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    background: var(--bg-card-2);
-    padding: 2px 6px;
-    border-radius: 4px;
-    color: var(--purple);
-    display: inline-block;
-    margin-top: 4px;
-  }
-
-  /* ── CONTENT AREA ── */
-  .content { padding: 24px 28px 40px; }
-
-  /* ── STATS GRID ── */
-  .stats {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0,1fr));
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-  .stat-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 18px 20px;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.2s;
-    animation: fadeUp 0.4s ease both;
-  }
-  .stat-card:nth-child(1) { animation-delay: 0.05s; }
-  .stat-card:nth-child(2) { animation-delay: 0.1s; }
-  .stat-card:nth-child(3) { animation-delay: 0.15s; }
-  .stat-card:nth-child(4) { animation-delay: 0.2s; }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .stat-card:hover { border-color: var(--border-md); }
-  .stat-card::before {
-    content: '';
-    position: absolute;
-    top: -10px; right: -10px;
-    width: 70px; height: 70px;
-    border-radius: 50%;
-    filter: blur(28px);
-    opacity: 0.18;
-  }
-  .stat-card.amber::before { background: var(--amber); }
-  .stat-card.green::before { background: var(--green); }
-  .stat-card.red::before   { background: var(--red); }
-  .stat-card.blue::before  { background: var(--blue); }
-
-  .stat-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .stat-icon {
-    width: 32px; height: 32px;
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .stat-icon.amber { background: var(--amber-bg); color: var(--amber); }
-  .stat-icon.green { background: var(--green-bg); color: var(--green); }
-  .stat-icon.red   { background: var(--red-bg); color: var(--red); }
-  .stat-icon.blue  { background: var(--blue-bg); color: var(--blue); }
-  .stat-trend { font-size: 11px; font-weight: 500; }
-  .stat-trend.up { color: var(--green); }
-  .stat-number { font-size: 32px; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 2px; }
-  .stat-label { font-size: 12px; color: var(--text-muted); }
-
-  /* ── TOOLBAR ── */
-  .toolbar {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .search-wrap {
-    flex: 1; min-width: 200px;
-    position: relative;
-  }
-  .search-wrap svg {
-    position: absolute; left: 12px; top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-muted);
-    pointer-events: none;
-  }
-  .search-wrap input {
-    width: 100%;
-    height: 38px;
-    padding: 0 12px 0 38px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text-primary);
-    font-size: 13px;
-    font-family: 'DM Sans', sans-serif;
-    transition: border-color 0.15s;
-  }
-  .search-wrap input::placeholder { color: var(--text-muted); }
-  .search-wrap input:focus { outline: none; border-color: var(--accent); }
-
-  .filter-select {
-    height: 38px;
-    padding: 0 32px 0 12px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text-primary);
-    font-size: 13px;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23555d72' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    transition: border-color 0.15s;
-  }
-  .filter-select:focus { outline: none; border-color: var(--accent); }
-
-  .btn {
-    height: 38px;
-    padding: 0 16px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 500;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-  .btn-ghost {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    color: var(--text-secondary);
-  }
-  .btn-ghost:hover { border-color: var(--border-md); color: var(--text-primary); }
-  .btn-primary {
-    background: var(--accent);
-    border: 1px solid transparent;
-    color: #fff;
-  }
-  .btn-primary:hover { background: #3d6ce8; }
-
-  /* ── TABLE ── */
-  .table-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    animation: fadeUp 0.4s ease 0.25s both;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-  }
-  .table-header {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .table-header h3 { font-size: 14px; font-weight: 500; }
-  .table-header span { font-size: 12px; color: var(--text-muted); }
-
-  table { width: 100%; border-collapse: collapse; }
-  thead tr { background: #f8f9fb; }
-  th {
-    padding: 11px 16px;
-    text-align: left;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    white-space: nowrap;
-    border-bottom: 1px solid var(--border);
-  }
-  td {
-    padding: 13px 16px;
-    font-size: 13px;
-    color: var(--text-primary);
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
-  }
-  tr:last-child td { border-bottom: none; }
-  tbody tr { transition: background 0.12s; }
-  tbody tr:hover { background: var(--bg-hover); }
-
-  .user-cell { display: flex; align-items: center; gap: 10px; }
-  .avatar {
-    width: 34px; height: 34px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 600;
-    flex-shrink: 0;
-    border: 1px solid var(--border);
-  }
-  .user-name { font-weight: 500; font-size: 13px; }
-  .user-email { font-size: 11px; color: var(--text-muted); font-family: 'DM Mono', monospace; margin-top: 1px; }
-
-  .badge {
-    display: inline-flex; align-items: center; gap: 5px;
-    padding: 3px 10px;
-    border-radius: 99px;
-    font-size: 11px;
-    font-weight: 500;
-    white-space: nowrap;
-  }
-  .badge::before {
-    content: '';
-    width: 5px; height: 5px;
-    border-radius: 50%;
-  }
-  .badge.onboarding { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
-  .badge.onboarding::before { background: var(--amber); }
-  .badge.revision    { background: var(--blue-bg);  color: var(--blue);  border: 1px solid rgba(96,165,250,0.2); }
-  .badge.revision::before { background: var(--blue); }
-  .badge.activo      { background: var(--green-bg); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
-  .badge.activo::before { background: var(--green); }
-  .badge.rechazado   { background: var(--red-bg);   color: var(--red);   border: 1px solid rgba(239,68,68,0.2); }
-  .badge.rechazado::before { background: var(--red); }
-  .badge.aprobado    { background: var(--purple-bg);color: var(--purple);border: 1px solid rgba(167,139,250,0.2); }
-  .badge.aprobado::before { background: var(--purple); }
-
-  .cat-text { font-size: 12px; color: var(--text-secondary); max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .date-text { font-size: 12px; color: var(--text-muted); font-family: 'DM Mono', monospace; }
-
-  .action-btn {
-    height: 28px;
-    padding: 0 12px;
-    background: var(--bg-card-2);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text-secondary);
-    font-size: 12px;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    display: inline-flex; align-items: center; gap: 5px;
-    transition: all 0.15s;
-  }
-  .action-btn:hover { background: var(--bg-hover); border-color: var(--border-md); color: var(--text-primary); }
-
-  /* ── PAGINATION ── */
-  .pagination {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 20px;
-    border-top: 1px solid var(--border);
-    background: var(--bg-card-2);
-  }
-  .pag-info { font-size: 12px; color: var(--text-muted); }
-  .pag-btns { display: flex; gap: 4px; }
-  .pag-btn {
-    height: 28px; min-width: 28px;
-    padding: 0 6px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text-secondary);
-    font-size: 12px;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.12s;
-  }
-  .pag-btn:hover { border-color: var(--border-md); color: var(--text-primary); }
-  .pag-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-
-  /* ── EMPTY STATE ── */
-  .empty {
-    text-align: center;
-    padding: 48px 24px;
-    color: var(--text-muted);
-    font-size: 13px;
-  }
-  .empty svg { margin-bottom: 12px; opacity: 0.3; }
-
-  /* ── ROLE LEGEND ── */
-  .legend {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-  }
-  .legend-item {
-    display: flex; align-items: center; gap: 6px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 99px;
-    padding: 4px 12px;
-    font-size: 11px;
-    color: var(--text-secondary);
-  }
-  .legend-dot { width: 6px; height: 6px; border-radius: 50%; }
-
-  /* ── ROUTES TABLE ── */
-  .routes-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 24px;
-    animation: fadeUp 0.4s ease 0.1s both;
-  }
-  .route-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 16px;
-    transition: border-color 0.15s, box-shadow 0.15s;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-  }
-  .route-card:hover { border-color: var(--border-md); box-shadow: 0 4px 10px rgba(0,0,0,0.07); }
-  .route-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-  .route-path {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--purple);
-    background: var(--purple-bg);
-    padding: 2px 8px;
-    border-radius: 4px;
-  }
-  .route-perms {
-    margin-left: auto;
-    font-size: 10px;
-    color: var(--text-muted);
-    background: var(--bg-card-2);
-    padding: 2px 7px;
-    border-radius: 4px;
-  }
-  .route-title { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
-  .route-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
-
-  /* ── SCROLLBAR ── */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
-
-  /* ── DETAIL OVERLAY ── */
-  .overlay {
-    display: none;
-    position: fixed; inset: 0; z-index: 200;
-    background: rgba(15,17,26,0.45);
-    backdrop-filter: blur(2px);
-    align-items: flex-start;
-    justify-content: flex-end;
-  }
-  .overlay.open { display: flex; }
-  .detail-panel {
-    width: min(820px, 100vw);
-    height: 100vh;
-    background: #f4f5f7;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    animation: slideIn 0.22s ease;
-  }
-  @keyframes slideIn {
-    from { transform: translateX(40px); opacity: 0; }
-    to   { transform: translateX(0);    opacity: 1; }
-  }
-  .detail-topbar {
-    height: 56px;
-    background: #fff;
-    border-bottom: 1px solid rgba(0,0,0,0.07);
-    display: flex;
-    align-items: center;
-    padding: 0 24px;
-    gap: 12px;
-    position: sticky; top: 0; z-index: 10;
-    flex-shrink: 0;
-  }
-  .back-btn {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 13px; color: #4b5563;
-    cursor: pointer; border: none; background: none;
-    font-family: 'DM Sans', sans-serif;
-    padding: 0;
-  }
-  .back-btn:hover { color: #111827; }
-  .detail-title { font-size: 14px; font-weight: 500; color: #111827; margin-left: 4px; }
-  .detail-body {
-    display: grid;
-    grid-template-columns: 260px 1fr;
-    gap: 16px;
-    padding: 20px 24px 40px;
-  }
-  .detail-left { display: flex; flex-direction: column; gap: 12px; }
-  .d-card {
-    background: #fff;
-    border: 1px solid rgba(0,0,0,0.07);
-    border-radius: 12px;
-    padding: 18px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-  }
-  .d-card-title {
-    font-size: 11px; font-weight: 500;
-    letter-spacing: 0.06em; text-transform: uppercase;
-    color: #9ca3af; margin-bottom: 14px;
-    display: flex; align-items: center; gap: 7px;
-  }
-  .d-row {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    padding: 7px 0;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    gap: 8px;
-  }
-  .d-row:last-child { border-bottom: none; padding-bottom: 0; }
-  .d-key { font-size: 12px; color: #9ca3af; flex-shrink: 0; }
-  .d-val { font-size: 12px; color: #111827; text-align: right; font-family: 'DM Mono', monospace; max-width: 140px; word-break: break-all; }
-  .d-badge {
-    display: inline-flex; align-items: center; gap: 4px;
-    padding: 2px 10px; border-radius: 99px;
-    font-size: 11px; font-weight: 500;
-  }
-  .d-badge.activo { background: rgba(22,163,74,0.1); color: #166534; border: 1px solid rgba(22,163,74,0.2); }
-  .detail-right { display: flex; flex-direction: column; gap: 0; }
-  .docs-card {
-    background: #fff;
-    border: 1px solid rgba(0,0,0,0.07);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-  }
-  .docs-header { padding: 18px 20px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); }
-  .docs-header h3 { font-size: 15px; font-weight: 500; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
-  .docs-header p { font-size: 12px; color: #9ca3af; }
-  .progress-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
-  .progress-bar-wrap { flex: 1; height: 6px; background: #f0f0f0; border-radius: 99px; overflow: hidden; }
-  .progress-bar-fill { height: 100%; background: #16a34a; border-radius: 99px; transition: width 0.4s ease; }
-  .progress-pct { font-size: 12px; font-weight: 500; color: #16a34a; }
-  .doc-row {
-    display: flex; align-items: center;
-    padding: 13px 20px;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    gap: 12px;
-    transition: background 0.12s;
-  }
-  .doc-row:last-child { border-bottom: none; }
-  .doc-row:hover { background: #f8f9fb; }
-  .doc-icon {
-    width: 32px; height: 32px; border-radius: 8px;
-    background: rgba(22,163,74,0.08);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    color: #16a34a;
-  }
-  .doc-info { flex: 1; min-width: 0; }
-  .doc-name { font-size: 13px; font-weight: 500; color: #111827; }
-  .doc-file { font-size: 11px; color: #9ca3af; font-family: 'DM Mono', monospace; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .doc-badge {
-    display: inline-flex; align-items: center; gap: 4px;
-    padding: 3px 10px; border-radius: 99px;
-    font-size: 11px; font-weight: 500; flex-shrink: 0;
-  }
-  .doc-badge.aprobado { background: rgba(22,163,74,0.1); color: #166534; border: 1px solid rgba(22,163,74,0.2); }
-  .doc-badge.pendiente { background: rgba(245,158,11,0.1); color: #92400e; border: 1px solid rgba(245,158,11,0.2); }
-  .doc-actions { display: flex; gap: 6px; flex-shrink: 0; }
-  .doc-btn {
-    width: 28px; height: 28px; border-radius: 7px;
-    border: 1px solid rgba(0,0,0,0.1);
-    background: #fff; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.12s; color: #6b7280;
-  }
-  .doc-btn:hover { border-color: rgba(0,0,0,0.2); color: #111827; background: #f4f5f7; }
-  .doc-btn.approve:hover { border-color: #16a34a; color: #16a34a; background: rgba(22,163,74,0.05); }
-  .doc-btn.reject:hover  { border-color: #dc2626; color: #dc2626; background: rgba(220,38,38,0.05); }
-  .doc-btn.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
-  .detail-actions-bar {
-    background: #fff;
-    border: 1px solid rgba(0,0,0,0.07);
-    border-radius: 12px;
-    padding: 14px 18px;
-    margin-top: 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-  }
-  .action-tag {
-    font-size: 11px; color: #9ca3af;
-    background: #f4f5f7; border: 1px solid rgba(0,0,0,0.07);
-    padding: 3px 10px; border-radius: 99px;
-  }
-  .btn-danger {
-    height: 34px; padding: 0 14px;
-    border-radius: 8px; font-size: 12px;
-    font-family: 'DM Sans', sans-serif; font-weight: 500;
-    cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
-    background: rgba(220,38,38,0.07); border: 1px solid rgba(220,38,38,0.2);
-    color: #dc2626; margin-left: auto;
-    transition: all 0.15s;
-  }
-  .btn-danger:hover { background: rgba(220,38,38,0.12); border-color: rgba(220,38,38,0.35); }
-  .pending-tag {
-    font-size: 10px; padding: 2px 8px; border-radius: 4px;
-    background: rgba(245,158,11,0.1); color: #92400e;
-    border: 1px solid rgba(245,158,11,0.2);
-  }
-
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --chrome-bg:#1c1e26;--chrome-bar:#141620;--chrome-text:#7a7f94;--chrome-acc:#4f7bff;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--chrome-bg);min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+/* CHROME */
+.proto-bar{height:48px;background:var(--chrome-bar);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;position:sticky;top:0;z-index:1000}
+.proto-logo{font-size:12px;font-weight:600;color:#fff;letter-spacing:.04em;display:flex;align-items:center;gap:7px}
+.proto-dot{width:7px;height:7px;border-radius:50%;background:var(--chrome-acc);box-shadow:0 0 6px var(--chrome-acc);animation:blink 2.5s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.proto-sep{width:1px;height:20px;background:rgba(255,255,255,.08)}
+.screen-nav{display:flex;gap:4px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:3px}
+.screen-pill{height:28px;padding:0 14px;border-radius:6px;font-size:11px;font-weight:500;color:var(--chrome-text);cursor:pointer;border:none;background:transparent;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap}
+.screen-pill:hover{color:#fff;background:rgba(255,255,255,.07)}
+.screen-pill.active{background:var(--chrome-acc);color:#fff}
+.proto-info{margin-left:auto;display:flex;align-items:center;gap:8px}
+.proto-badge{font-size:10px;font-weight:500;padding:3px 9px;border-radius:4px;letter-spacing:.04em}
+.proto-badge.wip{background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.25)}
+.proto-badge.live{background:rgba(79,123,255,.15);color:#7ba3ff;border:1px solid rgba(79,123,255,.25)}
+.proto-badge.route{font-family:'DM Mono',monospace;background:rgba(255,255,255,.06);color:var(--chrome-text);border:1px solid rgba(255,255,255,.08)}
+/* STAGE */
+.proto-stage{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:28px 20px 48px;gap:20px;overflow-y:auto}
+.frame-wrap{display:flex;flex-direction:column;align-items:flex-start;gap:0;flex-shrink:0}
+.frame-label{font-size:10px;font-weight:500;color:rgba(255,255,255,.2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.screen-frame{width:1060px;min-height:680px;background:#f4f5f7;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 70px rgba(0,0,0,.55)}
+/* ANNOTATIONS */
+.annotations{width:240px;flex-shrink:0;display:flex;flex-direction:column;gap:8px;padding-top:30px}
+.ann-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:9px;padding:11px 13px;transition:border-color .15s}
+.ann-card:hover{border-color:rgba(255,255,255,.13)}
+.ann-num{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;background:var(--chrome-acc);color:#fff;font-size:9px;font-weight:700;flex-shrink:0}
+.ann-title{font-size:12px;font-weight:500;color:#e0e2ed;margin-bottom:3px}
+.ann-desc{font-size:11px;color:var(--chrome-text);line-height:1.6}
+.ann-tag{display:inline-block;margin-top:5px;font-size:10px;font-family:'DM Mono',monospace;background:rgba(79,123,255,.12);color:#7ba3ff;padding:2px 7px;border-radius:4px}
+.ann-tag.warn{background:rgba(245,158,11,.1);color:#f59e0b}
+/* APP SHELL */
+.app{display:flex;min-height:680px;font-family:'DM Sans',sans-serif}
+.sidebar{width:200px;flex-shrink:0;background:#1a1d27;display:flex;flex-direction:column;min-height:680px}
+.sb-brand{padding:16px 15px 12px;border-bottom:1px solid rgba(255,255,255,.07)}
+.sb-brand-name{font-size:13px;font-weight:600;color:#fff}
+.sb-brand-sub{font-size:11px;color:rgba(255,255,255,.28);margin-top:2px}
+.sb-section{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.22);padding:12px 15px 4px}
+.sb-item{display:flex;align-items:center;gap:8px;padding:8px 15px;font-size:13px;color:rgba(255,255,255,.5);cursor:pointer;transition:all .12s;border-left:2px solid transparent}
+.sb-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.9)}
+.sb-item.active{background:rgba(79,123,255,.12);color:#fff;border-left-color:#4f7bff}
+.sb-item svg{flex-shrink:0;opacity:.7}
+.sb-item.active svg{opacity:1}
+.sb-badge{margin-left:auto;font-size:10px;font-weight:600;padding:1px 6px;border-radius:99px;background:#f59e0b;color:#000}
+.sb-badge.blue{background:#4f7bff;color:#fff}
+.sb-footer{margin-top:auto;padding:12px 15px;border-top:1px solid rgba(255,255,255,.07)}
+.sb-user{font-size:11px;color:rgba(255,255,255,.28);font-family:'DM Mono',monospace;margin-bottom:8px;word-break:break-all}
+.sb-logout{display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,.3);cursor:pointer}
+.sb-logout:hover{color:#ef4444}
+/* MAIN AREA */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:52px;flex-shrink:0;background:#fff;border-bottom:1px solid rgba(0,0,0,.07);display:flex;align-items:center;padding:0 22px;gap:10px}
+.topbar-title{font-size:14px;font-weight:500;color:#111827}
+.topbar-sep{width:1px;height:16px;background:rgba(0,0,0,.1)}
+.topbar-sub{font-size:12px;color:#9ca3af}
+.topbar-right{margin-left:auto;display:flex;gap:8px}
+.tb-btn{height:32px;padding:0 13px;border-radius:7px;font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .12s}
+.tb-btn.ghost{background:#fff;border:1px solid rgba(0,0,0,.1);color:#4b5563}
+.tb-btn.ghost:hover{border-color:rgba(0,0,0,.2);color:#111827}
+.tb-btn.primary{background:#4f7bff;border:1px solid transparent;color:#fff}
+.tb-btn.primary:hover{background:#3d6ce8}
+.content{padding:20px 22px 40px;overflow-y:auto;background:#f4f5f7;flex:1}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.stat{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:9px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.stat-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;margin-bottom:9px}
+.stat-icon.amber{background:rgba(217,119,6,.1);color:#d97706}
+.stat-icon.green{background:rgba(22,163,74,.1);color:#16a34a}
+.stat-icon.red{background:rgba(220,38,38,.1);color:#dc2626}
+.stat-icon.blue{background:rgba(79,123,255,.1);color:#4f7bff}
+.stat-num{font-size:26px;font-weight:600;color:#111827;letter-spacing:-.03em}
+.stat-lbl{font-size:11px;color:#9ca3af;margin-top:2px}
+/* TOOLBAR */
+.toolbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.search-wrap{flex:1;min-width:180px;position:relative}
+.search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#9ca3af;pointer-events:none}
+.search-wrap input{width:100%;height:34px;padding:0 10px 0 34px;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:7px;color:#111827;font-size:12px;font-family:'DM Sans',sans-serif}
+.search-wrap input::placeholder{color:#c4c9d4}
+.search-wrap input:focus{outline:none;border-color:#4f7bff}
+.flt{height:34px;padding:0 28px 0 10px;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:7px;color:#374151;font-size:12px;font-family:'DM Sans',sans-serif;appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%239ca3af' d='M5 7L1 3h8z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
+.flt:focus{outline:none;border-color:#4f7bff}
+/* TABLE */
+.tbl-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:9px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.tbl-head{padding:12px 16px;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;justify-content:space-between}
+.tbl-head h3{font-size:13px;font-weight:500;color:#111827}
+.tbl-head span{font-size:12px;color:#9ca3af}
+table{width:100%;border-collapse:collapse}
+thead tr{background:#f8f9fb}
+th{padding:8px 14px;text-align:left;font-size:11px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:#9ca3af;border-bottom:1px solid rgba(0,0,0,.06)}
+td{padding:11px 14px;font-size:13px;color:#111827;border-bottom:1px solid rgba(0,0,0,.05);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr{transition:background .1s}
+tbody tr:hover{background:#f8f9fb}
+.user-cell{display:flex;align-items:center;gap:9px}
+.avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0}
+.u-name{font-size:13px;font-weight:500}
+.u-email{font-size:11px;color:#9ca3af;font-family:'DM Mono',monospace;margin-top:1px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:500;white-space:nowrap}
+.badge::before{content:'';width:5px;height:5px;border-radius:50%}
+.badge.onboarding{background:rgba(217,119,6,.1);color:#d97706;border:1px solid rgba(217,119,6,.2)}
+.badge.onboarding::before{background:#d97706}
+.badge.revision{background:rgba(37,99,235,.1);color:#2563eb;border:1px solid rgba(37,99,235,.2)}
+.badge.revision::before{background:#2563eb}
+.badge.activo{background:rgba(22,163,74,.1);color:#16a34a;border:1px solid rgba(22,163,74,.2)}
+.badge.activo::before{background:#16a34a}
+.badge.rechazado{background:rgba(220,38,38,.1);color:#dc2626;border:1px solid rgba(220,38,38,.2)}
+.badge.rechazado::before{background:#dc2626}
+.cat-txt{font-size:12px;color:#4b5563;max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.date-txt{font-size:12px;color:#9ca3af;font-family:'DM Mono',monospace}
+.revisar-btn{height:26px;padding:0 11px;background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:6px;color:#4b5563;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all .12s}
+.revisar-btn:hover{border-color:#4f7bff;color:#4f7bff;background:rgba(79,123,255,.04)}
+.revisar-btn.highlight{border-color:#4f7bff;color:#4f7bff;background:rgba(79,123,255,.06);font-weight:500}
+.pag-row{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#f8f9fb;border-top:1px solid rgba(0,0,0,.06)}
+.pag-row span{font-size:12px;color:#9ca3af}
+.pag-btns{display:flex;gap:3px}
+.pag-btn{height:25px;min-width:25px;padding:0 6px;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:5px;color:#6b7280;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.pag-btn.active{background:#4f7bff;border-color:#4f7bff;color:#fff}
+/* REVIEW SCREEN */
+.review-topbar{height:52px;flex-shrink:0;background:#fff;border-bottom:1px solid rgba(0,0,0,.07);display:flex;align-items:center;padding:0 22px;gap:10px}
+.back-btn{display:flex;align-items:center;gap:5px;font-size:13px;color:#6b7280;cursor:pointer;border:none;background:none;font-family:'DM Sans',sans-serif;transition:color .15s;padding:0}
+.back-btn:hover{color:#111827}
+.review-body{display:grid;grid-template-columns:240px 1fr;gap:14px;padding:20px 22px 40px;background:#f4f5f7}
+.rv-left{display:flex;flex-direction:column;gap:10px}
+.rv-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:9px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.rv-card-title{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#9ca3af;margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.rv-row{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.05);gap:6px}
+.rv-row:last-child{border-bottom:none;padding-bottom:0}
+.rv-key{font-size:12px;color:#9ca3af;flex-shrink:0}
+.rv-val{font-size:11px;color:#111827;text-align:right;font-family:'DM Mono',monospace;max-width:130px;word-break:break-all}
+.pending-box{background:#fffbeb;border:1px solid rgba(245,158,11,.2);border-radius:9px;padding:12px 14px}
+.pending-box-title{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#d97706;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.pending-tag{display:inline-block;font-size:10px;background:rgba(245,158,11,.1);color:#92400e;border:1px solid rgba(245,158,11,.2);padding:2px 8px;border-radius:4px;margin:2px 2px 0 0}
+.rv-right{display:flex;flex-direction:column;gap:10px}
+.docs-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:9px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.docs-hdr{padding:14px 16px 10px;border-bottom:1px solid rgba(0,0,0,.06)}
+.docs-hdr h3{font-size:13px;font-weight:500;color:#111827;display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.docs-hdr p{font-size:12px;color:#9ca3af}
+.prog-row{display:flex;align-items:center;gap:9px;margin-top:9px}
+.prog-bar{flex:1;height:4px;background:#f0f0f0;border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;background:#16a34a;border-radius:99px}
+.prog-pct{font-size:11px;font-weight:500;color:#16a34a}
+.doc-row{display:flex;align-items:center;padding:10px 16px;border-bottom:1px solid rgba(0,0,0,.05);gap:9px;transition:background .1s}
+.doc-row:last-child{border-bottom:none}
+.doc-row:hover{background:#f8f9fb}
+.doc-ico{width:28px;height:28px;border-radius:6px;background:rgba(22,163,74,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#16a34a}
+.doc-info{flex:1;min-width:0}
+.doc-name{font-size:12px;font-weight:500;color:#111827}
+.doc-file{font-size:10px;color:#9ca3af;font-family:'DM Mono',monospace;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.doc-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:99px;font-size:10px;font-weight:500;flex-shrink:0}
+.doc-badge.aprobado{background:rgba(22,163,74,.1);color:#166534;border:1px solid rgba(22,163,74,.2)}
+.doc-btn{width:25px;height:25px;border-radius:5px;border:1px solid rgba(0,0,0,.1);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;color:#9ca3af}
+.doc-btn.ok:hover{border-color:#16a34a;color:#16a34a;background:rgba(22,163,74,.04)}
+.doc-btn.bad:hover{border-color:#dc2626;color:#dc2626;background:rgba(220,38,38,.04)}
+.doc-btn.dis{opacity:.3;pointer-events:none}
+.act-bar{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:9px;padding:11px 14px;display:flex;align-items:center;gap:9px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.act-bar-state{font-size:11px;font-family:'DM Mono',monospace;background:#f4f5f7;border:1px solid rgba(0,0,0,.08);padding:2px 8px;border-radius:4px;color:#6b7280}
+.btn-danger{height:30px;padding:0 12px;border-radius:6px;font-size:12px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:5px;background:rgba(220,38,38,.07);border:1px solid rgba(220,38,38,.2);color:#dc2626;margin-left:auto;transition:all .12s}
+.btn-danger:hover{background:rgba(220,38,38,.13);border-color:rgba(220,38,38,.35)}
+/* APPROVER */
+.approver-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.ap-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:9px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.ap-card-top{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.ap-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.ap-name{font-size:13px;font-weight:500;color:#111827}
+.ap-email{font-size:11px;color:#9ca3af;font-family:'DM Mono',monospace;margin-top:1px}
+.ap-meta{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+.ap-tag{font-size:11px;padding:2px 8px;border-radius:4px;background:#f4f5f7;color:#6b7280;border:1px solid rgba(0,0,0,.07)}
+.ap-actions{display:flex;gap:7px}
+.ap-btn{flex:1;height:32px;border-radius:7px;font-size:12px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .12s}
+.ap-btn.activate{background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.25);color:#166534}
+.ap-btn.activate:hover{background:rgba(22,163,74,.14)}
+.ap-btn.reject{background:rgba(220,38,38,.07);border:1px solid rgba(220,38,38,.2);color:#dc2626}
+.ap-btn.reject:hover{background:rgba(220,38,38,.12)}
+.ap-docs{font-size:11px;color:#9ca3af;margin-left:auto}
+/* SEDES */
+.sedes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.sede-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:9px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);transition:border-color .15s}
+.sede-card:hover{border-color:rgba(0,0,0,.15)}
+.sede-icon{width:32px;height:32px;border-radius:7px;background:rgba(79,123,255,.1);display:flex;align-items:center;justify-content:center;color:#4f7bff;margin-bottom:9px}
+.sede-name{font-size:13px;font-weight:500;color:#111827;margin-bottom:2px}
+.sede-meta{font-size:11px;color:#9ca3af}
+.sede-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:1px solid rgba(0,0,0,.06)}
+.sede-approver{font-size:11px;color:#4b5563;display:flex;align-items:center;gap:4px}
+.sede-edit{height:24px;padding:0 9px;background:#f4f5f7;border:1px solid rgba(0,0,0,.08);border-radius:5px;font-size:11px;color:#6b7280;cursor:pointer;font-family:'DM Sans',sans-serif}
+.sede-edit:hover{border-color:rgba(0,0,0,.18);color:#111827}
+.add-sede{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;border:1px dashed rgba(0,0,0,.15);border-radius:9px;padding:14px;cursor:pointer;transition:all .15s;color:#9ca3af;font-size:12px;gap:5px}
+.add-sede:hover{border-color:#4f7bff;color:#4f7bff;background:rgba(79,123,255,.02)}
+/* SCREEN TOGGLE */
+.screen{display:none}
+.screen.active{display:block}
 </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
-<nav class="sidebar">
-  <div class="sidebar-brand">
-    <div class="brand-badge">
-      <div class="brand-dot"></div>
-      <span>Live · v2.3</span>
-    </div>
-    <div class="brand-name">CSC Admin</div>
-    <div class="brand-sub">Panel Administrativo</div>
+<!-- CHROME BAR -->
+<div class="proto-bar">
+  <div class="proto-logo">
+    <div class="proto-dot"></div>
+    CSC Admin &middot; Prototipo
   </div>
-
-  <div class="nav-section-label">Administración</div>
-  <div class="nav-item active" onclick="setActive(this)">
-    <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="currentColor"/></svg>
-    Solicitudes
-    <span class="nav-badge" id="pending-count">1</span>
+  <div class="proto-sep"></div>
+  <div class="screen-nav">
+    <button class="screen-pill active" onclick="goScreen('dashboard')">Dashboard</button>
+    <button class="screen-pill" onclick="goScreen('review')">Revisar solicitud</button>
+    <button class="screen-pill" onclick="goScreen('approver')">Aprobador presencial</button>
+    <button class="screen-pill" onclick="goScreen('sedes')">Gestión de sedes</button>
   </div>
-  <div class="nav-item" onclick="setActive(this)">
-    <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-3 2.7-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-    Aprobador Presencial
-    <span class="nav-badge blue">2</span>
-  </div>
-  <div class="nav-item" onclick="setActive(this)">
-    <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 7h6M5 10h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-    Gestión de Sedes
-  </div>
-  <div class="nav-section-label">Sistema</div>
-  <div class="nav-item" onclick="setActive(this)">
-    <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.2 3.2l1.4 1.4M11.4 11.4l1.4 1.4M3.2 12.8l1.4-1.4M11.4 4.6l1.4-1.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-    Configuración
-  </div>
-
-  <div class="sidebar-footer">
-    <div class="footer-email">administracion@otronodo.com</div>
-    <div class="logout">
-      <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M6 14H3a1 1 0 01-1-1V3a1 1 0 011-1h3M10 11l3-3-3-3M13 8H6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Cerrar sesión
-    </div>
-  </div>
-</nav>
-
-<!-- MAIN -->
-<main class="main">
-
-  <!-- TOPBAR -->
-  <div class="topbar">
-    <span class="topbar-title">Panel de Solicitudes</span>
-    <div class="topbar-sep"></div>
-    <span class="topbar-sub">Gestión de onboarding de usuarios</span>
-    <div class="topbar-actions">
-      <button class="btn btn-ghost" onclick="exportCSV()">
-        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M4 12h8M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Exportar CSV
-      </button>
-      <button class="btn btn-primary">
-        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        Nueva solicitud
-      </button>
-    </div>
-  </div>
-
-  <!-- DESCRIPTION BANNER -->
-  <div class="desc-banner">
-    <div class="desc-section">
-      <h4>¿Qué es este panel?</h4>
-      <p>Vista central del proceso de onboarding. Cada fila es un usuario que se registró y está pendiente de revisión documental y aprobación presencial antes de activarse en la plataforma.</p>
-    </div>
-    <div class="desc-section">
-      <h4>Flujo de estados</h4>
-      <p>Registro → <strong style="color:var(--amber)">En Onboarding</strong> → <strong style="color:var(--blue)">En Revisión</strong> → <strong style="color:var(--purple)">Aprobado docs</strong> → aprobación presencial → <strong style="color:var(--green)">Activo</strong>. Un rechazo en cualquier punto mueve el estado a <strong style="color:var(--red)">Rechazado</strong>.</p>
-    </div>
-    <div class="desc-section">
-      <h4>Rutas principales</h4>
-      <p>Revisar solicitud individual:
-        <span class="route">/admin/request/:id</span>
-      </p>
-      <p style="margin-top:6px">Aprobación presencial:
-        <span class="route">/admin/approver</span>
-      </p>
-      <p style="margin-top:6px">Sedes (solo superadmin):
-        <span class="route">/admin/sedes</span>
-      </p>
-    </div>
-  </div>
-
-  <div class="content">
-
-    <!-- STATS -->
-    <div class="stats">
-      <div class="stat-card amber">
-        <div class="stat-header">
-          <div class="stat-icon amber">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M8 5v3.5l2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-          </div>
-          <span class="stat-trend up">activos</span>
-        </div>
-        <div class="stat-number" id="n-revision">1</div>
-        <div class="stat-label">En Revisión</div>
-      </div>
-      <div class="stat-card green">
-        <div class="stat-header">
-          <div class="stat-icon green">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-        </div>
-        <div class="stat-number" id="n-approved">0</div>
-        <div class="stat-label">Aprobados</div>
-      </div>
-      <div class="stat-card red">
-        <div class="stat-header">
-          <div class="stat-icon red">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M5 5l6 6M11 5l-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-          </div>
-        </div>
-        <div class="stat-number" id="n-rejected">0</div>
-        <div class="stat-label">Rechazados</div>
-      </div>
-      <div class="stat-card blue">
-        <div class="stat-header">
-          <div class="stat-icon blue">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M8 5v3h2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-          </div>
-          <span class="stat-trend up">+2 esta semana</span>
-        </div>
-        <div class="stat-number" id="n-active">2</div>
-        <div class="stat-label">Activos</div>
-      </div>
-    </div>
-
-    <!-- ROUTES GRID -->
-    <div class="routes-grid">
-      <div class="route-card">
-        <div class="route-top">
-          <span class="route-path">/admin</span>
-          <span class="route-perms">admin · superadmin</span>
-        </div>
-        <div class="route-title">AdminDashboard</div>
-        <div class="route-desc">Lista paginada de todas las solicitudes con filtros por estado, categoría y búsqueda. Punto de entrada principal.</div>
-      </div>
-      <div class="route-card">
-        <div class="route-top">
-          <span class="route-path">/admin/request/:id</span>
-          <span class="route-perms">admin · superadmin</span>
-        </div>
-        <div class="route-title">RequestReview</div>
-        <div class="route-desc">Revisión documental individual. Aprobar o rechazar documentos, cambiar estado del usuario.</div>
-      </div>
-      <div class="route-card">
-        <div class="route-top">
-          <span class="route-path">/admin/approver</span>
-          <span class="route-perms">approver · superadmin</span>
-        </div>
-        <div class="route-title">ApproverPanel</div>
-        <div class="route-desc">Verificación presencial. Activa usuarios con documentación aprobada o los rechaza.</div>
-      </div>
-      <div class="route-card">
-        <div class="route-top">
-          <span class="route-path">/admin/sedes</span>
-          <span class="route-perms">solo superadmin</span>
-        </div>
-        <div class="route-title">SedeManagement</div>
-        <div class="route-desc">CRUD de sedes. Asignación de aprobadores por sede. Exclusivo para superadmin.</div>
-      </div>
-    </div>
-
-    <!-- TABLA -->
-    <div class="table-card">
-      <div class="table-header">
-        <h3>Solicitudes de onboarding</h3>
-        <span id="count-label">5 solicitudes</span>
-      </div>
-
-      <!-- TOOLBAR -->
-      <div style="padding:14px 16px; border-bottom:1px solid var(--border); display:flex; gap:10px; flex-wrap:wrap;">
-        <div class="search-wrap" style="flex:1;min-width:180px;">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.4"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-          <input type="text" id="q" placeholder="Buscar por nombre o correo..." oninput="render()">
-        </div>
-        <select class="filter-select" id="f-status" onchange="render()">
-          <option value="">Todos los estados</option>
-          <option value="onboarding">En Onboarding</option>
-          <option value="revision">En Revisión</option>
-          <option value="activo">Activo</option>
-          <option value="rechazado">Rechazado</option>
-          <option value="aprobado">Aprobado</option>
-        </select>
-        <select class="filter-select" id="f-cat" onchange="render()">
-          <option value="">Todas las categorías</option>
-          <option value="emprendedor">Emprendedor</option>
-          <option value="distribuidor">Distribuidor</option>
-          <option value="constructor">Constructor</option>
-          <option value="alcaldia">Alcaldía / Gobernación</option>
-        </select>
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Solicitante</th>
-            <th>Categoría</th>
-            <th>Estado</th>
-            <th>Fecha</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
-
-      <div class="pagination">
-        <span class="pag-info" id="pag-info">Mostrando 1–5 de 5</span>
-        <div class="pag-btns">
-          <button class="pag-btn" onclick="prevPage()">‹</button>
-          <button class="pag-btn active" id="pag-current">1</button>
-          <button class="pag-btn" onclick="nextPage()">›</button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</main>
-
-<script>
-const DATA = [
-  { init:"?",  bg:"#fef3c7", tc:"#92400e", name:"Sin nombre",              email:"cliente2@otronodo.com",              cat:"Emprendedor",                                     catK:"emprendedor", status:"onboarding", label:"En Onboarding", date:"28/3/2026" },
-  { init:"SA", bg:"#ede9fe", tc:"#5b21b6", name:"Super Admin",             email:"superadmin@otronodo.com",            cat:"—",                                               catK:"",            status:"activo",     label:"Activo",        date:"25/2/2026" },
-  { init:"?",  bg:"#fef3c7", tc:"#92400e", name:"Sin nombre",              email:"luis@otronodo.com",                  cat:"Distribuidor / Ferretería / Bloquera",            catK:"distribuidor",status:"onboarding", label:"En Onboarding", date:"24/2/2026" },
-  { init:"?",  bg:"#dbeafe", tc:"#1e40af", name:"Sin nombre",              email:"max@otronodo.com.ar",                cat:"Alcaldía / Gobernación",                          catK:"alcaldia",    status:"revision",   label:"En Revisión",   date:"23/2/2026" },
-  { init:"ML", bg:"#dcfce7", tc:"#166534", name:"Maximiliano Leguizamón",  email:"leguizamonmaximiliano@gmail.com",    cat:"Constructor",                                     catK:"constructor", status:"activo",     label:"Activo",        date:"22/2/2026" },
-];
-
-const PER_PAGE = 10;
-let page = 1;
-
-function filtered() {
-  const q = document.getElementById('q').value.toLowerCase();
-  const s = document.getElementById('f-status').value;
-  const c = document.getElementById('f-cat').value;
-  return DATA.filter(r => {
-    const mQ = !q || r.name.toLowerCase().includes(q) || r.email.toLowerCase().includes(q);
-    const mS = !s || r.status === s;
-    const mC = !c || r.catK === c;
-    return mQ && mS && mC;
-  });
-}
-
-function render() {
-  page = 1;
-  const rows = filtered();
-  const start = (page-1)*PER_PAGE, end = Math.min(start+PER_PAGE, rows.length);
-  const slice = rows.slice(start, end);
-
-  document.getElementById('count-label').textContent = rows.length + ' solicitud' + (rows.length!==1?'es':'');
-  document.getElementById('pag-info').textContent = rows.length === 0 ? '0 resultados' : `Mostrando ${start+1}–${end} de ${rows.length}`;
-  document.getElementById('pag-current').textContent = page;
-
-  const tbody = document.getElementById('tbody');
-  if (slice.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5"><div class="empty"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="1.5"/><path d="M10 16h12M16 10v12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><div>Sin resultados</div></div></td></tr>`;
-    return;
-  }
-
-  tbody.innerHTML = slice.map(r => `
-    <tr>
-      <td>
-        <div class="user-cell">
-          <div class="avatar" style="background:${r.bg};color:${r.tc}">${r.init}</div>
-          <div>
-            <div class="user-name">${r.name}</div>
-            <div class="user-email">${r.email}</div>
-          </div>
-        </div>
-      </td>
-      <td><span class="cat-text" title="${r.cat}">${r.cat}</span></td>
-      <td><span class="badge ${r.status}">${r.label}</span></td>
-      <td><span class="date-text">${r.date}</span></td>
-      <td>
-        <button class="action-btn" onclick="review('${r.email}')">
-          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="2" fill="currentColor"/></svg>
-          Revisar
-        </button>
-      </td>
-    </tr>
-  `).join('');
-
-  updateStats(filtered());
-}
-
-function updateStats(rows) {
-  document.getElementById('n-revision').textContent = rows.filter(r=>r.status==='revision').length || DATA.filter(r=>r.status==='revision').length;
-  document.getElementById('n-approved').textContent = rows.filter(r=>r.status==='aprobado').length || 0;
-  document.getElementById('n-rejected').textContent = rows.filter(r=>r.status==='rechazado').length || 0;
-  document.getElementById('n-active').textContent   = rows.filter(r=>r.status==='activo').length || DATA.filter(r=>r.status==='activo').length;
-  const pending = DATA.filter(r=>r.status==='revision'||r.status==='onboarding').length;
-  document.getElementById('pending-count').textContent = pending;
-}
-
-function prevPage() { if(page>1){page--;render();} }
-function nextPage() { const rows=filtered(); if(page*PER_PAGE<rows.length){page++;render();} }
-function review(email) { if(email==='leguizamonmaximiliano@gmail.com'){ showDetail(); } else { alert('En producción navega a /admin/request/:id\n\nSolo Maximiliano Leguizamón tiene demo en esta vista previa.'); } }
-function setActive(el) { document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); el.classList.add('active'); }
-
-function exportCSV() {
-  const rows = filtered();
-  const header = 'Nombre,Correo,Categoría,Estado,Fecha';
-  const lines = rows.map(r=>`"${r.name}","${r.email}","${r.cat}","${r.label}","${r.date}"`);
-  const blob = new Blob([header+'\n'+lines.join('\n')], {type:'text/csv;charset=utf-8;'});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = 'solicitudes_csc.csv'; a.click();
-}
-
-render();
-
-const DOCS = [
-  { name:'Hoja Consignación',       file:'hoja_consignacion.pdf',                         status:'aprobado' },
-  { name:'Acta Constitutiva',       file:'acta_constitutiva.pdf',                         status:'aprobado' },
-  { name:'Referencias Comerciales', file:'referencias_comerciales.pdf',                   status:'aprobado' },
-  { name:'Carta Solicitud',         file:'carta_solicitud.pdf',                           status:'aprobado' },
-  { name:'Declaración ISLR IVA',    file:'declaracion_islr_iva.pdf',                      status:'aprobado' },
-  { name:'Referencia Bancaria',     file:'referencia_bancaria.pdf',                       status:'aprobado' },
-  { name:'Contrato Obra',           file:'contrato_obra.pdf',                             status:'aprobado' },
-  { name:'Memoria Descriptiva',     file:'memoria_descriptiva.pdf',                       status:'aprobado' },
-  { name:'Registro Fotográfico',    file:'registro_fotografico.pdf',                      status:'aprobado' },
-  { name:'Rif Empresa Accionistas', file:'detalle_transferencia_22-02-2026_2041 (1).pdf', status:'aprobado' },
-  { name:'Cédula Accionistas',      file:'detalle_transferencia_22-02-2026_2041 (1).pdf', status:'aprobado' },
-];
-
-function showDetail() {
-  document.getElementById('overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  renderDocs();
-}
-function closeDetail() {
-  document.getElementById('overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-function handleOverlayClick(e) {
-  if(e.target === document.getElementById('overlay')) closeDetail();
-}
-function renderDocs() {
-  const list = document.getElementById('doc-list');
-  list.innerHTML = DOCS.map((d,i) => `
-    <div class="doc-row">
-      <div class="doc-icon">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 2h6l3 3v9H4V2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M10 2v3h3" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
-      </div>
-      <div class="doc-info">
-        <div class="doc-name">${d.name}</div>
-        <div class="doc-file">${d.file}</div>
-      </div>
-      <span class="doc-badge ${d.status}">${d.status === 'aprobado' ? 'Aprobado' : 'Pendiente'}</span>
-      <div class="doc-actions">
-        <button class="doc-btn disabled" title="Vista previa" onclick="alert('Preview: ' + '${d.file}')">
-          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><ellipse cx="8" cy="8" rx="6" ry="4" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="1.8" fill="currentColor"/></svg>
-        </button>
-        <button class="doc-btn approve disabled" title="Aprobado">
-          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button class="doc-btn reject disabled" title="Rechazado">
-          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M5 5l6 6M11 5l-6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-    </div>
-  `).join('');
-}
-
-</script>
-
-<!-- DETAIL OVERLAY -->
-<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
-  <div class="detail-panel" id="detail-panel">
-    <div class="detail-topbar">
-      <button class="back-btn" onclick="closeDetail()">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Volver al listado
-      </button>
-      <span style="color:rgba(0,0,0,0.15);">|</span>
-      <span class="detail-title">Maximiliano Leguizamón — Constructor</span>
-      <span class="d-badge activo" style="margin-left:auto">
-        <span style="width:5px;height:5px;border-radius:50%;background:#16a34a;display:inline-block"></span>
-        Activo
-      </span>
-    </div>
-
-    <div class="detail-body">
-      <!-- LEFT -->
-      <div class="detail-left">
-        <!-- Perfil -->
-        <div class="d-card">
-          <div class="d-card-title">
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-3 2.7-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-            Información del Solicitante
-          </div>
-          <div class="d-row"><span class="d-key">Estado</span><span><span class="d-badge activo">Activo</span></span></div>
-          <div class="d-row"><span class="d-key">Email</span><span class="d-val">leguizamonmaximiliano@gmail.com</span></div>
-          <div class="d-row"><span class="d-key">Teléfono</span><span class="d-val">0414-5551234</span></div>
-          <div class="d-row"><span class="d-key">Registro</span><span class="d-val">22/2/2026</span></div>
-        </div>
-
-        <!-- Formulario -->
-        <div class="d-card">
-          <div class="d-card-title">
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-            Datos del Formulario
-          </div>
-          <div class="d-row"><span class="d-key">Rif</span><span class="d-val">J-12233444</span></div>
-          <div class="d-row"><span class="d-key">Correo</span><span class="d-val">correo@gamil.com</span></div>
-          <div class="d-row"><span class="d-key">Teléfono</span><span class="d-val">0343154512214</span></div>
-          <div class="d-row"><span class="d-key">Nombre Obra</span><span class="d-val">obra</span></div>
-          <div class="d-row"><span class="d-key">Fecha Inicio</span><span class="d-val">2026-02-28</span></div>
-          <div class="d-row"><span class="d-key">Razón Social</span><span class="d-val">13132131321312</span></div>
-          <div class="d-row"><span class="d-key">Monto Estimado</span><span class="d-val">300,000</span></div>
-          <div class="d-row"><span class="d-key">Ubicación Obra</span><span class="d-val">nueva</span></div>
-          <div class="d-row"><span class="d-key">Dirección Fiscal</span><span class="d-val">Buenos Aires 476</span></div>
-          <div class="d-row"><span class="d-key">Fecha Culminación</span><span class="d-val">2026-03-20</span></div>
-          <div class="d-row"><span class="d-key">Rep. Legal</span><span class="d-val">Maximiliai</span></div>
-        </div>
-
-        <!-- Limitaciones pendientes -->
-        <div class="d-card" style="background:#fffbeb;border-color:rgba(245,158,11,0.2);">
-          <div class="d-card-title" style="color:#d97706;">
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2l6 12H2L8 2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 7v3M8 11.5v.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-            Pendiente de implementar
-          </div>
-          <div style="display:flex;flex-direction:column;gap:6px;">
-            <span class="pending-tag">Rechazo global de solicitud</span>
-            <span class="pending-tag">Cambiar sede desde revisión</span>
-            <span class="pending-tag">Editar datos del usuario</span>
-            <span class="pending-tag">Correo de aprobación (dominio pendiente)</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- RIGHT -->
-      <div class="detail-right">
-        <div class="docs-card">
-          <div class="docs-header">
-            <h3>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 2h6l3 3v9H4V2z" stroke="#6b7280" stroke-width="1.3" stroke-linejoin="round"/><path d="M10 2v3h3" stroke="#6b7280" stroke-width="1.3" stroke-linejoin="round"/><path d="M6 7h5M6 10h3" stroke="#6b7280" stroke-width="1.3" stroke-linecap="round"/></svg>
-              Documentos (11)
-            </h3>
-            <p>Revise cada documento individualmente</p>
-            <div class="progress-row">
-              <span style="font-size:12px;color:#4b5563;">11/11 documentos requeridos aprobados</span>
-              <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%"></div></div>
-              <span class="progress-pct">100%</span>
-            </div>
-          </div>
-
-          <div id="doc-list"></div>
-        </div>
-
-        <!-- Actions bar -->
-        <div class="detail-actions-bar">
-          <span style="font-size:13px;font-weight:500;color:#111827;">Acciones del perfil</span>
-          <span class="action-tag">approved_documentation</span>
-          <button class="btn-danger" onclick="alert('En producción: abre diálogo con textarea obligatorio para motivo de rechazo')">
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M5 5l6 6M11 5l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            Rechazar solicitud
-          </button>
-        </div>
-      </div>
-    </div>
+  <div class="proto-info">
+    <span class="proto-badge wip">WIP</span>
+    <span class="proto-badge route" id="current-route">/admin</span>
+    <span class="proto-badge live">v2.3</span>
   </div>
 </div>
 
+<!-- STAGE -->
+<div class="proto-stage">
+
+  <div class="frame-wrap">
+    <div class="frame-label" id="frame-label">AdminDashboard.tsx</div>
+    <div class="screen-frame">
+
+      <!-- SCREEN: DASHBOARD -->
+      <div id="s-dashboard" class="screen active">
+        <div class="app">
+          <nav class="sidebar">
+            <div class="sb-brand"><div class="sb-brand-name">CSC Admin</div><div class="sb-brand-sub">Panel Administrativo</div></div>
+            <div class="sb-section">Administraci&oacute;n</div>
+            <div class="sb-item active">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="9" y="1" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="1" y="9" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="9" y="9" width="6" height="6" rx="1.2" fill="currentColor"/></svg>
+              Solicitudes <span class="sb-badge">1</span>
+            </div>
+            <div class="sb-item" onclick="goScreen('approver')">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.8" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-2.8 2.7-4.8 6-4.8s6 2 6 4.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              Aprobador Presencial <span class="sb-badge blue">2</span>
+            </div>
+            <div class="sb-item" onclick="goScreen('sedes')">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 7h6M5 10h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              Gesti&oacute;n de Sedes
+            </div>
+            <div class="sb-footer">
+              <div class="sb-user">administracion@otronodo.com</div>
+              <div class="sb-logout"><svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M6 14H3a1 1 0 01-1-1V3a1 1 0 011-1h3M10 11l3-3-3-3M13 8H6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>Cerrar sesi&oacute;n</div>
+            </div>
+          </nav>
+          <div class="main">
+            <div class="topbar">
+              <span class="topbar-title">Panel de Solicitudes</span>
+              <div class="topbar-sep"></div>
+              <span class="topbar-sub">Gesti&oacute;n de onboarding de usuarios</span>
+              <div class="topbar-right">
+                <button class="tb-btn ghost" onclick="exportCSV()">
+                  <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M4 12h8M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Exportar CSV
+                </button>
+              </div>
+            </div>
+            <div class="content">
+              <div class="stats">
+                <div class="stat"><div class="stat-icon amber"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M8 5v3.2l2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="stat-num">1</div><div class="stat-lbl">En Revisi&oacute;n</div></div>
+                <div class="stat"><div class="stat-icon green"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="stat-num">0</div><div class="stat-lbl">Aprobados</div></div>
+                <div class="stat"><div class="stat-icon red"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M5 5l6 6M11 5l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="stat-num">0</div><div class="stat-lbl">Rechazados</div></div>
+                <div class="stat"><div class="stat-icon blue"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 8.5l2 2 3-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="stat-num">2</div><div class="stat-lbl">Activos</div></div>
+              </div>
+              <div class="toolbar">
+                <div class="search-wrap">
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.4"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                  <input type="text" placeholder="Buscar por nombre o correo..." oninput="filterRows(this.value)">
+                </div>
+                <select class="flt" onchange="filterStatus(this.value)">
+                  <option value="">Todos los estados</option>
+                  <option>En Onboarding</option>
+                  <option>En Revisi&oacute;n</option>
+                  <option>Activo</option>
+                  <option>Rechazado</option>
+                </select>
+                <select class="flt">
+                  <option>Todas las categor&iacute;as</option>
+                  <option>Emprendedor</option>
+                  <option>Distribuidor</option>
+                  <option>Constructor</option>
+                  <option>Alcald&iacute;a / Gobernaci&oacute;n</option>
+                </select>
+              </div>
+              <div class="tbl-card">
+                <div class="tbl-head"><h3>Solicitudes de onboarding</h3><span id="tbl-count">5 solicitudes</span></div>
+                <table><thead><tr><th>Solicitante</th><th>Categor&iacute;a</th><th>Estado</th><th>Fecha</th><th>Acci&oacute;n</th></tr></thead>
+                <tbody id="tbl-body"></tbody></table>
+                <div class="pag-row"><span id="pag-info">Mostrando 1&#8211;5 de 5</span><div class="pag-btns"><button class="pag-btn">&#8249;</button><button class="pag-btn active">1</button><button class="pag-btn">&#8250;</button></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREEN: REVIEW -->
+      <div id="s-review" class="screen">
+        <div class="app">
+          <nav class="sidebar">
+            <div class="sb-brand"><div class="sb-brand-name">CSC Admin</div><div class="sb-brand-sub">Panel Administrativo</div></div>
+            <div class="sb-section">Administraci&oacute;n</div>
+            <div class="sb-item active"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="9" y="1" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="1" y="9" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="9" y="9" width="6" height="6" rx="1.2" fill="currentColor"/></svg>Solicitudes</div>
+            <div class="sb-item" onclick="goScreen('approver')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.8" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-2.8 2.7-4.8 6-4.8s6 2 6 4.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Aprobador Presencial</div>
+            <div class="sb-item" onclick="goScreen('sedes')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 7h6M5 10h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Gesti&oacute;n de Sedes</div>
+            <div class="sb-footer"><div class="sb-user">administracion@otronodo.com</div></div>
+          </nav>
+          <div class="main">
+            <div class="review-topbar">
+              <button class="back-btn" onclick="goScreen('dashboard')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Volver al listado</button>
+              <div class="topbar-sep"></div>
+              <span style="font-size:13px;font-weight:500;color:#111827;">Maximiliano Leguizam&oacute;n</span>
+              <span class="badge activo" style="margin-left:7px">Activo</span>
+              <div class="topbar-right"><span style="font-size:12px;color:#9ca3af;">Constructor &middot; 22/2/2026</span></div>
+            </div>
+            <div class="review-body">
+              <div class="rv-left">
+                <div class="rv-card">
+                  <div class="rv-card-title"><svg width="11" height="11" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.8" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-2.8 2.7-4.8 6-4.8s6 2 6 4.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Informaci&oacute;n del Solicitante</div>
+                  <div class="rv-row"><span class="rv-key">Estado</span><span class="badge activo">Activo</span></div>
+                  <div class="rv-row"><span class="rv-key">Email</span><span class="rv-val">leguizamonmaximiliano@gmail.com</span></div>
+                  <div class="rv-row"><span class="rv-key">Tel&eacute;fono</span><span class="rv-val">0414-5551234</span></div>
+                  <div class="rv-row"><span class="rv-key">Registro</span><span class="rv-val">22/2/2026</span></div>
+                </div>
+                <div class="rv-card">
+                  <div class="rv-card-title"><svg width="11" height="11" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Datos del Formulario</div>
+                  <div class="rv-row"><span class="rv-key">Rif</span><span class="rv-val">J-12233444</span></div>
+                  <div class="rv-row"><span class="rv-key">Correo</span><span class="rv-val">correo@gamil.com</span></div>
+                  <div class="rv-row"><span class="rv-key">Tel&eacute;fono</span><span class="rv-val">0343154512214</span></div>
+                  <div class="rv-row"><span class="rv-key">Nombre Obra</span><span class="rv-val">obra</span></div>
+                  <div class="rv-row"><span class="rv-key">Fecha Inicio</span><span class="rv-val">2026-02-28</span></div>
+                  <div class="rv-row"><span class="rv-key">Raz&oacute;n Social</span><span class="rv-val">13132131321312</span></div>
+                  <div class="rv-row"><span class="rv-key">Monto Est.</span><span class="rv-val">300,000</span></div>
+                  <div class="rv-row"><span class="rv-key">Dir. Fiscal</span><span class="rv-val">Buenos Aires 476</span></div>
+                  <div class="rv-row"><span class="rv-key">Fecha Culm.</span><span class="rv-val">2026-03-20</span></div>
+                  <div class="rv-row"><span class="rv-key">Rep. Legal</span><span class="rv-val">Maximiliano</span></div>
+                </div>
+                <div class="pending-box">
+                  <div class="pending-box-title"><svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M8 2l6 12H2L8 2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 7v3M8 11.5v.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Pendiente</div>
+                  <span class="pending-tag">Rechazo global</span>
+                  <span class="pending-tag">Cambiar sede</span>
+                  <span class="pending-tag">Editar usuario</span>
+                  <span class="pending-tag">Correo aprobaci&oacute;n</span>
+                </div>
+              </div>
+              <div class="rv-right">
+                <div class="docs-card">
+                  <div class="docs-hdr">
+                    <h3><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M4 2h6l3 3v9H4V2z" stroke="#6b7280" stroke-width="1.3" stroke-linejoin="round"/><path d="M10 2v3h3" stroke="#6b7280" stroke-width="1.3"/><path d="M6 7h5M6 10h3" stroke="#6b7280" stroke-width="1.3" stroke-linecap="round"/></svg>Documentos (11)</h3>
+                    <p>Revise cada documento individualmente</p>
+                    <div class="prog-row"><span style="font-size:11px;color:#4b5563;">11/11 aprobados</span><div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div><span class="prog-pct">100%</span></div>
+                  </div>
+                  <div id="doc-list-rv"></div>
+                </div>
+                <div class="act-bar">
+                  <span style="font-size:13px;font-weight:500;color:#111827;">Estado del perfil</span>
+                  <span class="act-bar-state">approved_documentation</span>
+                  <button class="btn-danger"><svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M5 5l6 6M11 5l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Rechazar solicitud</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREEN: APPROVER -->
+      <div id="s-approver" class="screen">
+        <div class="app">
+          <nav class="sidebar">
+            <div class="sb-brand"><div class="sb-brand-name">CSC Admin</div><div class="sb-brand-sub">Panel Administrativo</div></div>
+            <div class="sb-section">Administraci&oacute;n</div>
+            <div class="sb-item" onclick="goScreen('dashboard')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="9" y="1" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="1" y="9" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="9" y="9" width="6" height="6" rx="1.2" fill="currentColor"/></svg>Solicitudes</div>
+            <div class="sb-item active"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.8" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-2.8 2.7-4.8 6-4.8s6 2 6 4.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Aprobador Presencial</div>
+            <div class="sb-item" onclick="goScreen('sedes')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 7h6M5 10h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Gesti&oacute;n de Sedes</div>
+            <div class="sb-footer"><div class="sb-user">administracion@otronodo.com</div></div>
+          </nav>
+          <div class="main">
+            <div class="topbar">
+              <span class="topbar-title">Aprobador Presencial</span>
+              <div class="topbar-sep"></div>
+              <span class="topbar-sub">Usuarios con documentaci&oacute;n completa pendientes de verificaci&oacute;n</span>
+            </div>
+            <div class="content">
+              <div class="approver-grid">
+                <div class="ap-card">
+                  <div class="ap-card-top"><div class="ap-avatar" style="background:#dcfce7;color:#166534">ML</div><div><div class="ap-name">Maximiliano Leguizam&oacute;n</div><div class="ap-email">leguizamonmaximiliano@gmail.com</div></div><span class="ap-docs">11/11 docs</span></div>
+                  <div class="ap-meta"><span class="ap-tag">Constructor</span><span class="ap-tag">Sede Caracas</span><span class="ap-tag">22/2/2026</span></div>
+                  <div class="ap-actions"><button class="ap-btn activate"><svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Activar cuenta</button><button class="ap-btn reject"><svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M5 5l6 6M11 5l-6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Rechazar</button></div>
+                </div>
+                <div class="ap-card">
+                  <div class="ap-card-top"><div class="ap-avatar" style="background:#dbeafe;color:#1e40af">SA</div><div><div class="ap-name">Super Admin</div><div class="ap-email">superadmin@otronodo.com</div></div><span class="ap-docs">&mdash;</span></div>
+                  <div class="ap-meta"><span class="ap-tag">Admin</span><span class="ap-tag">Sede Central</span><span class="ap-tag">25/2/2026</span></div>
+                  <div class="ap-actions"><button class="ap-btn activate"><svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Activar cuenta</button><button class="ap-btn reject"><svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M5 5l6 6M11 5l-6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Rechazar</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREEN: SEDES -->
+      <div id="s-sedes" class="screen">
+        <div class="app">
+          <nav class="sidebar">
+            <div class="sb-brand"><div class="sb-brand-name">CSC Admin</div><div class="sb-brand-sub">Panel Administrativo</div></div>
+            <div class="sb-section">Administraci&oacute;n</div>
+            <div class="sb-item" onclick="goScreen('dashboard')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="9" y="1" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="1" y="9" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="9" y="9" width="6" height="6" rx="1.2" fill="currentColor"/></svg>Solicitudes</div>
+            <div class="sb-item" onclick="goScreen('approver')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.8" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-2.8 2.7-4.8 6-4.8s6 2 6 4.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Aprobador Presencial</div>
+            <div class="sb-item active"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 7h6M5 10h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Gesti&oacute;n de Sedes</div>
+            <div class="sb-footer"><div class="sb-user">administracion@otronodo.com</div></div>
+          </nav>
+          <div class="main">
+            <div class="topbar">
+              <span class="topbar-title">Gesti&oacute;n de Sedes</span>
+              <div class="topbar-sep"></div>
+              <span class="topbar-sub">Solo superadmin</span>
+              <div class="topbar-right"><button class="tb-btn primary"><svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Nueva sede</button></div>
+            </div>
+            <div class="content">
+              <div class="sedes-grid">
+                <div class="sede-card"><div class="sede-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1l1 3h3l-2.5 2 1 3L8 7.5 5.5 9l1-3L4 4h3L8 1z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></div><div class="sede-name">Sede Caracas</div><div class="sede-meta">3 aprobadores &middot; 12 usuarios activos</div><div class="sede-footer"><span class="sede-approver"><svg width="9" height="9" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.8" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-2.8 2.7-4.8 6-4.8s6 2 6 4.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Ana Torres</span><button class="sede-edit">Editar</button></div></div>
+                <div class="sede-card"><div class="sede-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1l1 3h3l-2.5 2 1 3L8 7.5 5.5 9l1-3L4 4h3L8 1z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></div><div class="sede-name">Sede Maracaibo</div><div class="sede-meta">1 aprobador &middot; 5 usuarios activos</div><div class="sede-footer"><span class="sede-approver"><svg width="9" height="9" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.8" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-2.8 2.7-4.8 6-4.8s6 2 6 4.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Pedro Ruiz</span><button class="sede-edit">Editar</button></div></div>
+                <div class="sede-card"><div class="sede-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1l1 3h3l-2.5 2 1 3L8 7.5 5.5 9l1-3L4 4h3L8 1z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></div><div class="sede-name">Sede Valencia</div><div class="sede-meta">2 aprobadores &middot; 8 usuarios activos</div><div class="sede-footer"><span class="sede-approver"><svg width="9" height="9" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.8" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-2.8 2.7-4.8 6-4.8s6 2 6 4.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Mar&iacute;a L&oacute;pez</span><button class="sede-edit">Editar</button></div></div>
+                <div class="add-sede"><svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Agregar sede</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /screen-frame -->
+  </div><!-- /frame-wrap -->
+
+  <!-- ANNOTATIONS -->
+  <div class="annotations" id="annotations"></div>
+
+</div><!-- /stage -->
+
+<script>
+const ROWS=[
+  {init:'?', bg:'#fef3c7',tc:'#92400e',name:'Sin nombre',          email:'cliente2@otronodo.com',          cat:'Emprendedor',                         status:'onboarding',lbl:'En Onboarding',date:'28/3/2026',demo:false},
+  {init:'SA',bg:'#ede9fe',tc:'#5b21b6',name:'Super Admin',         email:'superadmin@otronodo.com',        cat:'&mdash;',                             status:'activo',    lbl:'Activo',       date:'25/2/2026',demo:false},
+  {init:'?', bg:'#fef3c7',tc:'#92400e',name:'Sin nombre',          email:'luis@otronodo.com',              cat:'Distribuidor / Ferretera / Bloquera', status:'onboarding',lbl:'En Onboarding',date:'24/2/2026',demo:false},
+  {init:'?', bg:'#dbeafe',tc:'#1e40af',name:'Sin nombre',          email:'max@otronodo.com.ar',            cat:'Alcald&iacute;a / Gobernaci&oacute;n',status:'revision',  lbl:'En Revisi&oacute;n',date:'23/2/2026',demo:false},
+  {init:'ML',bg:'#dcfce7',tc:'#166534',name:'Maximiliano Leguizam&oacute;n',email:'leguizamonmaximiliano@gmail.com',cat:'Constructor',status:'activo',lbl:'Activo',date:'22/2/2026',demo:true},
+];
+const DOCS=['Hoja Consignaci&oacute;n','Acta Constitutiva','Referencias Comerciales','Carta Solicitud','Declaraci&oacute;n ISLR IVA','Referencia Bancaria','Contrato Obra','Memoria Descriptiva','Registro Fotogr&aacute;fico','Rif Empresa Accionistas','C&eacute;dula Accionistas'];
+const SCREENS={
+  dashboard:{route:'/admin',label:'AdminDashboard.tsx',annotations:[
+    {n:1,title:'Tarjetas de estad&iacute;sticas',desc:'Conteos en tiempo real desde Supabase. under_review, approved_documentation, rejected, active_final.',tag:'Supabase realtime'},
+    {n:2,title:'Filtros combinables',desc:'B&uacute;squeda fulltext + estado (8 opciones) + categor&iacute;a. Se combinan con AND. Actualizan la URL con query params.',tag:'useSearchParams()'},
+    {n:3,title:'Tabla paginada',desc:'10 filas por p&aacute;gina. Excluye autom&aacute;ticamente perfiles admin / superadmin / approver.',tag:'10 por p&aacute;gina'},
+    {n:4,title:'Bot&oacute;n Revisar',desc:'Navega a /admin/request/:id. En este prototipo, solo Maximiliano Leguizam&oacute;n tiene la pantalla completa demo.',tag:'/admin/request/:id',warn:true},
+    {n:5,title:'Exportar CSV',desc:'Descarga las filas visibles respetando los filtros activos. Generado client-side con Blob API en UTF-8.',tag:'client-side Blob'},
+  ]},
+  review:{route:'/admin/request/:id',label:'RequestReview.tsx',annotations:[
+    {n:1,title:'Tarjeta de perfil',desc:'Estado actual, email, tel&eacute;fono y fecha de registro. El estado cambia autom&aacute;ticamente al aprobar todos los documentos obligatorios.',tag:'auto-transition'},
+    {n:2,title:'Datos del formulario',desc:'Itera el campo JSONB form_data mostrando cada par clave-valor. Los campos var&iacute;an seg&uacute;n la categor&iacute;a del solicitante.',tag:'Object.entries(form_data)'},
+    {n:3,title:'Barra de progreso',desc:'approvedCount / totalRequired seg&uacute;n la matriz de documentos por categor&iacute;a. Al llegar a 100% el perfil pasa a approved_documentation.',tag:'matriz por categor&iacute;a'},
+    {n:4,title:'Acciones por documento',desc:'Vista previa en iframe, Aprobar (deshabilita botones) y Rechazar (abre di&aacute;logo con textarea obligatorio para motivo).',tag:'disabled si ya revisado'},
+    {n:5,title:'Pendientes de implementar',desc:'Rechazo global de solicitud, cambiar sede desde esta vista, editar datos del usuario y correo de aprobaci&oacute;n (dominio pendiente).',tag:'backlog',warn:true},
+  ]},
+  approver:{route:'/admin/approver',label:'ApproverPanel.tsx',annotations:[
+    {n:1,title:'Usuarios en espera',desc:'Solo muestra perfiles con estado approved_documentation. La documentaci&oacute;n ya fue validada por el admin.',tag:'approved_documentation'},
+    {n:2,title:'Activar cuenta',desc:'Cambia el estado a active_final. Desencadena notificaci&oacute;n al usuario (email pendiente de verificaci&oacute;n de dominio).',tag:'&rarr; active_final'},
+    {n:3,title:'Rechazar presencial',desc:'Cambia el estado a rejected_presencial. Requiere motivo. Distinto del rechazo documental del admin.',tag:'&rarr; rejected_presencial'},
+    {n:4,title:'Permisos de acceso',desc:'Accesible para roles approver y superadmin. Los admins regulares no ven esta secci&oacute;n en el sidebar.',tag:'approver &middot; superadmin'},
+  ]},
+  sedes:{route:'/admin/sedes',label:'SedeManagement.tsx',annotations:[
+    {n:1,title:'CRUD de sedes',desc:'Crear, editar y eliminar sedes. Solo visible para superadmin. Los admins regulares no tienen acceso a esta ruta.',tag:'solo superadmin'},
+    {n:2,title:'Asignaci&oacute;n de aprobadores',desc:'Cada sede tiene uno o m&aacute;s aprobadores. El aprobador presencial solo ve usuarios de su sede asignada.',tag:'sede &rarr; aprobador &rarr; usuario'},
+    {n:3,title:'Pendiente',desc:'No hay pantalla de confirmaci&oacute;n antes de eliminar una sede. Tampoco hay historial de cambios de asignaci&oacute;n de aprobadores.',tag:'backlog',warn:true},
+  ]},
+};
+
+function goScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.screen-pill').forEach(p=>p.classList.remove('active'));
+  document.getElementById('s-'+name).classList.add('active');
+  const idx=['dashboard','review','approver','sedes'].indexOf(name);
+  document.querySelectorAll('.screen-pill')[idx].classList.add('active');
+  const meta=SCREENS[name];
+  document.getElementById('current-route').textContent=meta.route;
+  document.getElementById('frame-label').textContent=meta.label;
+  renderAnnotations(meta.annotations);
+  if(name==='review') renderDocList();
+}
+
+function renderAnnotations(list){
+  document.getElementById('annotations').innerHTML=list.map(a=>`
+    <div class="ann-card">
+      <div style="display:flex;align-items:flex-start;gap:8px">
+        <div class="ann-num">${a.n}</div>
+        <div style="flex:1">
+          <div class="ann-title">${a.title}</div>
+          <div class="ann-desc">${a.desc}</div>
+          ${a.tag?`<span class="ann-tag${a.warn?' warn':''}">${a.tag}</span>`:''}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderTable(rows){
+  const tbody=document.getElementById('tbl-body');
+  if(!tbody)return;
+  document.getElementById('tbl-count').textContent=rows.length+' solicitud'+(rows.length!==1?'es':'');
+  document.getElementById('pag-info').textContent=rows.length?`Mostrando 1\u20139${rows.length} de ${rows.length}`:'0 resultados';
+  tbody.innerHTML=rows.map(r=>`
+    <tr>
+      <td><div class="user-cell"><div class="avatar" style="background:${r.bg};color:${r.tc}">${r.init}</div><div><div class="u-name">${r.name}</div><div class="u-email">${r.email}</div></div></div></td>
+      <td><span class="cat-txt">${r.cat}</span></td>
+      <td><span class="badge ${r.status}">${r.lbl}</span></td>
+      <td><span class="date-txt">${r.date}</span></td>
+      <td><button class="revisar-btn${r.demo?' highlight':''}" onclick="${r.demo?"goScreen('review')":`alert('Navega a /admin/request/:id')`}">
+        <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="2" fill="currentColor"/></svg>
+        ${r.demo?'Revisar &rarr;':'Revisar'}
+      </button></td>
+    </tr>`).join('');
+}
+
+function filterRows(q){const v=q.toLowerCase();renderTable(v?ROWS.filter(r=>r.name.toLowerCase().includes(v)||r.email.toLowerCase().includes(v)):ROWS);}
+function filterStatus(v){const m={'En Onboarding':'onboarding','En Revisi\u00f3n':'revision','Activo':'activo','Rechazado':'rechazado'};renderTable(v?ROWS.filter(r=>r.status===m[v]):ROWS);}
+
+function renderDocList(){
+  const el=document.getElementById('doc-list-rv');if(!el)return;
+  el.innerHTML=DOCS.map(name=>`
+    <div class="doc-row">
+      <div class="doc-ico"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 2h6l3 3v9H4V2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M10 2v3h3" stroke="currentColor" stroke-width="1.3"/></svg></div>
+      <div class="doc-info"><div class="doc-name">${name}</div><div class="doc-file">${name.toLowerCase().replace(/\s+/g,'_')}.pdf</div></div>
+      <span class="doc-badge aprobado">Aprobado</span>
+      <div style="display:flex;gap:4px">
+        <button class="doc-btn dis"><svg width="10" height="10" viewBox="0 0 16 16" fill="none"><ellipse cx="8" cy="8" rx="6" ry="4" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="1.8" fill="currentColor"/></svg></button>
+        <button class="doc-btn ok dis"><svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="doc-btn bad dis"><svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M5 5l6 6M11 5l-6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+      </div>
+    </div>`).join('');
+}
+
+function exportCSV(){
+  const h='Nombre,Correo,Categoria,Estado,Fecha';
+  const lines=ROWS.map(r=>`"${r.name.replace(/&.*?;/g,'')}","${r.email}","${r.cat.replace(/&.*?;/g,'')}","${r.lbl.replace(/&.*?;/g,'')}","${r.date}"`);
+  const blob=new Blob([h+'\n'+lines.join('\n')],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='solicitudes_csc.csv';a.click();
+}
+
+renderTable(ROWS);
+renderAnnotations(SCREENS.dashboard.annotations);
+</script>
 </body>
 </html>
