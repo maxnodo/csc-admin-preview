@@ -524,6 +524,170 @@
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+  /* ── DETAIL OVERLAY ── */
+  .overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(15,17,26,0.45);
+    backdrop-filter: blur(2px);
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+  .overlay.open { display: flex; }
+  .detail-panel {
+    width: min(820px, 100vw);
+    height: 100vh;
+    background: #f4f5f7;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    animation: slideIn 0.22s ease;
+  }
+  @keyframes slideIn {
+    from { transform: translateX(40px); opacity: 0; }
+    to   { transform: translateX(0);    opacity: 1; }
+  }
+  .detail-topbar {
+    height: 56px;
+    background: #fff;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 12px;
+    position: sticky; top: 0; z-index: 10;
+    flex-shrink: 0;
+  }
+  .back-btn {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; color: #4b5563;
+    cursor: pointer; border: none; background: none;
+    font-family: 'DM Sans', sans-serif;
+    padding: 0;
+  }
+  .back-btn:hover { color: #111827; }
+  .detail-title { font-size: 14px; font-weight: 500; color: #111827; margin-left: 4px; }
+  .detail-body {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 16px;
+    padding: 20px 24px 40px;
+  }
+  .detail-left { display: flex; flex-direction: column; gap: 12px; }
+  .d-card {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .d-card-title {
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: #9ca3af; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .d-row {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    gap: 8px;
+  }
+  .d-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .d-key { font-size: 12px; color: #9ca3af; flex-shrink: 0; }
+  .d-val { font-size: 12px; color: #111827; text-align: right; font-family: 'DM Mono', monospace; max-width: 140px; word-break: break-all; }
+  .d-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 10px; border-radius: 99px;
+    font-size: 11px; font-weight: 500;
+  }
+  .d-badge.activo { background: rgba(22,163,74,0.1); color: #166534; border: 1px solid rgba(22,163,74,0.2); }
+  .detail-right { display: flex; flex-direction: column; gap: 0; }
+  .docs-card {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .docs-header { padding: 18px 20px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); }
+  .docs-header h3 { font-size: 15px; font-weight: 500; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .docs-header p { font-size: 12px; color: #9ca3af; }
+  .progress-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+  .progress-bar-wrap { flex: 1; height: 6px; background: #f0f0f0; border-radius: 99px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: #16a34a; border-radius: 99px; transition: width 0.4s ease; }
+  .progress-pct { font-size: 12px; font-weight: 500; color: #16a34a; }
+  .doc-row {
+    display: flex; align-items: center;
+    padding: 13px 20px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    gap: 12px;
+    transition: background 0.12s;
+  }
+  .doc-row:last-child { border-bottom: none; }
+  .doc-row:hover { background: #f8f9fb; }
+  .doc-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: rgba(22,163,74,0.08);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: #16a34a;
+  }
+  .doc-info { flex: 1; min-width: 0; }
+  .doc-name { font-size: 13px; font-weight: 500; color: #111827; }
+  .doc-file { font-size: 11px; color: #9ca3af; font-family: 'DM Mono', monospace; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .doc-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 99px;
+    font-size: 11px; font-weight: 500; flex-shrink: 0;
+  }
+  .doc-badge.aprobado { background: rgba(22,163,74,0.1); color: #166534; border: 1px solid rgba(22,163,74,0.2); }
+  .doc-badge.pendiente { background: rgba(245,158,11,0.1); color: #92400e; border: 1px solid rgba(245,158,11,0.2); }
+  .doc-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .doc-btn {
+    width: 28px; height: 28px; border-radius: 7px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: #fff; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.12s; color: #6b7280;
+  }
+  .doc-btn:hover { border-color: rgba(0,0,0,0.2); color: #111827; background: #f4f5f7; }
+  .doc-btn.approve:hover { border-color: #16a34a; color: #16a34a; background: rgba(22,163,74,0.05); }
+  .doc-btn.reject:hover  { border-color: #dc2626; color: #dc2626; background: rgba(220,38,38,0.05); }
+  .doc-btn.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+  .detail-actions-bar {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .action-tag {
+    font-size: 11px; color: #9ca3af;
+    background: #f4f5f7; border: 1px solid rgba(0,0,0,0.07);
+    padding: 3px 10px; border-radius: 99px;
+  }
+  .btn-danger {
+    height: 34px; padding: 0 14px;
+    border-radius: 8px; font-size: 12px;
+    font-family: 'DM Sans', sans-serif; font-weight: 500;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(220,38,38,0.07); border: 1px solid rgba(220,38,38,0.2);
+    color: #dc2626; margin-left: auto;
+    transition: all 0.15s;
+  }
+  .btn-danger:hover { background: rgba(220,38,38,0.12); border-color: rgba(220,38,38,0.35); }
+  .pending-tag {
+    font-size: 10px; padding: 2px 8px; border-radius: 4px;
+    background: rgba(245,158,11,0.1); color: #92400e;
+    border: 1px solid rgba(245,158,11,0.2);
+  }
+
 </style>
 </head>
 <body>
@@ -826,7 +990,7 @@ function updateStats(rows) {
 
 function prevPage() { if(page>1){page--;render();} }
 function nextPage() { const rows=filtered(); if(page*PER_PAGE<rows.length){page++;render();} }
-function review(email) { alert('Abriendo solicitud de ' + email + '\n(En producción navega a /admin/request/:id)'); }
+function review(email) { if(email==='leguizamonmaximiliano@gmail.com'){ showDetail(); } else { alert('En producción navega a /admin/request/:id\n\nSolo Maximiliano Leguizamón tiene demo en esta vista previa.'); } }
 function setActive(el) { document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); el.classList.add('active'); }
 
 function exportCSV() {
@@ -839,6 +1003,159 @@ function exportCSV() {
 }
 
 render();
+
+const DOCS = [
+  { name:'Hoja Consignación',       file:'hoja_consignacion.pdf',                         status:'aprobado' },
+  { name:'Acta Constitutiva',       file:'acta_constitutiva.pdf',                         status:'aprobado' },
+  { name:'Referencias Comerciales', file:'referencias_comerciales.pdf',                   status:'aprobado' },
+  { name:'Carta Solicitud',         file:'carta_solicitud.pdf',                           status:'aprobado' },
+  { name:'Declaración ISLR IVA',    file:'declaracion_islr_iva.pdf',                      status:'aprobado' },
+  { name:'Referencia Bancaria',     file:'referencia_bancaria.pdf',                       status:'aprobado' },
+  { name:'Contrato Obra',           file:'contrato_obra.pdf',                             status:'aprobado' },
+  { name:'Memoria Descriptiva',     file:'memoria_descriptiva.pdf',                       status:'aprobado' },
+  { name:'Registro Fotográfico',    file:'registro_fotografico.pdf',                      status:'aprobado' },
+  { name:'Rif Empresa Accionistas', file:'detalle_transferencia_22-02-2026_2041 (1).pdf', status:'aprobado' },
+  { name:'Cédula Accionistas',      file:'detalle_transferencia_22-02-2026_2041 (1).pdf', status:'aprobado' },
+];
+
+function showDetail() {
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderDocs();
+}
+function closeDetail() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleOverlayClick(e) {
+  if(e.target === document.getElementById('overlay')) closeDetail();
+}
+function renderDocs() {
+  const list = document.getElementById('doc-list');
+  list.innerHTML = DOCS.map((d,i) => `
+    <div class="doc-row">
+      <div class="doc-icon">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 2h6l3 3v9H4V2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M10 2v3h3" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="doc-info">
+        <div class="doc-name">${d.name}</div>
+        <div class="doc-file">${d.file}</div>
+      </div>
+      <span class="doc-badge ${d.status}">${d.status === 'aprobado' ? 'Aprobado' : 'Pendiente'}</span>
+      <div class="doc-actions">
+        <button class="doc-btn disabled" title="Vista previa" onclick="alert('Preview: ' + '${d.file}')">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><ellipse cx="8" cy="8" rx="6" ry="4" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="1.8" fill="currentColor"/></svg>
+        </button>
+        <button class="doc-btn approve disabled" title="Aprobado">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="doc-btn reject disabled" title="Rechazado">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M5 5l6 6M11 5l-6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
 </script>
+
+<!-- DETAIL OVERLAY -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="detail-panel" id="detail-panel">
+    <div class="detail-topbar">
+      <button class="back-btn" onclick="closeDetail()">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Volver al listado
+      </button>
+      <span style="color:rgba(0,0,0,0.15);">|</span>
+      <span class="detail-title">Maximiliano Leguizamón — Constructor</span>
+      <span class="d-badge activo" style="margin-left:auto">
+        <span style="width:5px;height:5px;border-radius:50%;background:#16a34a;display:inline-block"></span>
+        Activo
+      </span>
+    </div>
+
+    <div class="detail-body">
+      <!-- LEFT -->
+      <div class="detail-left">
+        <!-- Perfil -->
+        <div class="d-card">
+          <div class="d-card-title">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-3 2.7-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Información del Solicitante
+          </div>
+          <div class="d-row"><span class="d-key">Estado</span><span><span class="d-badge activo">Activo</span></span></div>
+          <div class="d-row"><span class="d-key">Email</span><span class="d-val">leguizamonmaximiliano@gmail.com</span></div>
+          <div class="d-row"><span class="d-key">Teléfono</span><span class="d-val">0414-5551234</span></div>
+          <div class="d-row"><span class="d-key">Registro</span><span class="d-val">22/2/2026</span></div>
+        </div>
+
+        <!-- Formulario -->
+        <div class="d-card">
+          <div class="d-card-title">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Datos del Formulario
+          </div>
+          <div class="d-row"><span class="d-key">Rif</span><span class="d-val">J-12233444</span></div>
+          <div class="d-row"><span class="d-key">Correo</span><span class="d-val">correo@gamil.com</span></div>
+          <div class="d-row"><span class="d-key">Teléfono</span><span class="d-val">0343154512214</span></div>
+          <div class="d-row"><span class="d-key">Nombre Obra</span><span class="d-val">obra</span></div>
+          <div class="d-row"><span class="d-key">Fecha Inicio</span><span class="d-val">2026-02-28</span></div>
+          <div class="d-row"><span class="d-key">Razón Social</span><span class="d-val">13132131321312</span></div>
+          <div class="d-row"><span class="d-key">Monto Estimado</span><span class="d-val">300,000</span></div>
+          <div class="d-row"><span class="d-key">Ubicación Obra</span><span class="d-val">nueva</span></div>
+          <div class="d-row"><span class="d-key">Dirección Fiscal</span><span class="d-val">Buenos Aires 476</span></div>
+          <div class="d-row"><span class="d-key">Fecha Culminación</span><span class="d-val">2026-03-20</span></div>
+          <div class="d-row"><span class="d-key">Rep. Legal</span><span class="d-val">Maximiliai</span></div>
+        </div>
+
+        <!-- Limitaciones pendientes -->
+        <div class="d-card" style="background:#fffbeb;border-color:rgba(245,158,11,0.2);">
+          <div class="d-card-title" style="color:#d97706;">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2l6 12H2L8 2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 7v3M8 11.5v.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Pendiente de implementar
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <span class="pending-tag">Rechazo global de solicitud</span>
+            <span class="pending-tag">Cambiar sede desde revisión</span>
+            <span class="pending-tag">Editar datos del usuario</span>
+            <span class="pending-tag">Correo de aprobación (dominio pendiente)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="detail-right">
+        <div class="docs-card">
+          <div class="docs-header">
+            <h3>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 2h6l3 3v9H4V2z" stroke="#6b7280" stroke-width="1.3" stroke-linejoin="round"/><path d="M10 2v3h3" stroke="#6b7280" stroke-width="1.3" stroke-linejoin="round"/><path d="M6 7h5M6 10h3" stroke="#6b7280" stroke-width="1.3" stroke-linecap="round"/></svg>
+              Documentos (11)
+            </h3>
+            <p>Revise cada documento individualmente</p>
+            <div class="progress-row">
+              <span style="font-size:12px;color:#4b5563;">11/11 documentos requeridos aprobados</span>
+              <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%"></div></div>
+              <span class="progress-pct">100%</span>
+            </div>
+          </div>
+
+          <div id="doc-list"></div>
+        </div>
+
+        <!-- Actions bar -->
+        <div class="detail-actions-bar">
+          <span style="font-size:13px;font-weight:500;color:#111827;">Acciones del perfil</span>
+          <span class="action-tag">approved_documentation</span>
+          <button class="btn-danger" onclick="alert('En producción: abre diálogo con textarea obligatorio para motivo de rechazo')">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M5 5l6 6M11 5l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Rechazar solicitud
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
