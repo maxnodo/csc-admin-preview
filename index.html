@@ -199,6 +199,16 @@ tbody tr:hover{background:#f8f9fb}
 /* SCREEN TOGGLE */
 .screen{display:none}
 .screen.active{display:block}
+
+.creds-bar{background:#fffbeb;border-bottom:1px solid rgba(245,158,11,.2);height:36px;display:flex;align-items:center;padding:0 20px;gap:14px;flex-shrink:0}
+.creds-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#d97706;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.creds-sep{width:1px;height:16px;background:rgba(245,158,11,.3)}
+.creds-field{display:flex;align-items:center;gap:6px}
+.creds-key{font-size:10px;color:#b45309;font-weight:500}
+.creds-val{font-size:11px;font-family:'DM Mono',monospace;color:#92400e;background:rgba(245,158,11,.1);padding:2px 8px;border-radius:4px;border:1px solid rgba(245,158,11,.2);cursor:pointer;transition:background .12s}
+.creds-val:hover{background:rgba(245,158,11,.2)}
+.creds-hint{margin-left:auto;font-size:10px;color:#b45309;opacity:.7}
+
 </style>
 </head>
 <body>
@@ -221,6 +231,28 @@ tbody tr:hover{background:#f8f9fb}
     <span class="proto-badge route" id="current-route">/admin</span>
     <span class="proto-badge live">v2.3</span>
   </div>
+</div>
+
+<!-- CREDENTIALS BAR -->
+<div class="creds-bar">
+  <div class="creds-label">
+    <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M8 7v4M8 5.5v.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+    Usuario de prueba &mdash; MVP
+  </div>
+  <div class="creds-sep"></div>
+  <div class="creds-field">
+    <span class="creds-key">Rol</span>
+    <span class="creds-val">superadmin</span>
+  </div>
+  <div class="creds-field">
+    <span class="creds-key">Email</span>
+    <span class="creds-val" onclick="copyText('superadmin@otronodo.com', this)" title="Click para copiar">superadmin@otronodo.com</span>
+  </div>
+  <div class="creds-field">
+    <span class="creds-key">Contrase&ntilde;a</span>
+    <span class="creds-val" onclick="copyText('Csc@2026', this)" title="Click para copiar">Csc@2026</span>
+  </div>
+  <span class="creds-hint">Click en email / contrase&ntilde;a para copiar</span>
 </div>
 
 <!-- STAGE -->
@@ -554,6 +586,23 @@ function exportCSV(){
 
 renderTable(ROWS);
 renderAnnotations(SCREENS.dashboard.annotations);
+
+function copyText(text, el) {
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = el.textContent;
+    el.textContent = 'Copiado!';
+    el.style.background = 'rgba(22,163,74,.15)';
+    el.style.borderColor = 'rgba(22,163,74,.3)';
+    el.style.color = '#166534';
+    setTimeout(() => {
+      el.textContent = orig;
+      el.style.background = '';
+      el.style.borderColor = '';
+      el.style.color = '';
+    }, 1500);
+  });
+}
+
 </script>
 </body>
 </html>
