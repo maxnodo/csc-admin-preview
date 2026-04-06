@@ -245,6 +245,7 @@ tbody tr:hover{background:#f8f9fb}
     <button class="screen-pill" onclick="goScreen('review')">Revisar solicitud</button>
     <button class="screen-pill" onclick="goScreen('approver')">Aprobador presencial</button>
     <button class="screen-pill" onclick="goScreen('sedes')">Gestión de sedes</button>
+    <button class="screen-pill" onclick="goScreen('categorias')">Categorías de clientes</button>
   </div>
   <div class="proto-info">
     <span class="proto-badge wip">WIP</span>
@@ -505,6 +506,133 @@ tbody tr:hover{background:#f8f9fb}
         </div>
       </div>
 
+
+      <!-- SCREEN: CATEGORIAS -->
+      <div id="s-categorias" class="screen">
+        <div class="app">
+          <nav class="sidebar">
+            <div class="sb-brand"><div class="sb-brand-name">CSC Admin</div><div class="sb-brand-sub">Panel Administrativo</div></div>
+            <div class="sb-section">Administraci&oacute;n</div>
+            <div class="sb-item" onclick="goScreen('dashboard')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="9" y="1" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="1" y="9" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="9" y="9" width="6" height="6" rx="1.2" fill="currentColor"/></svg>Solicitudes</div>
+            <div class="sb-item" onclick="goScreen('approver')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.8" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-2.8 2.7-4.8 6-4.8s6 2 6 4.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Aprobador Presencial</div>
+            <div class="sb-item" onclick="goScreen('sedes')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 7h6M5 10h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Gesti&oacute;n de Sedes</div>
+            <div class="sb-item active"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h10M3 12h6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Categor&iacute;as de Clientes</div>
+            <div class="sb-footer"><div class="sb-user">administracion@otronodo.com</div></div>
+          </nav>
+          <div class="main">
+            <div class="topbar">
+              <span class="topbar-title">Categor&iacute;as de Clientes</span>
+              <div class="topbar-sep"></div>
+              <span class="topbar-sub">Matriz documental por categor&iacute;a &middot; document-matrix.ts</span>
+            </div>
+            <div class="content">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:4px 0">
+
+                <!-- DISTRIBUIDOR -->
+                <div style="background:#fff;border:1px solid rgba(0,0,0,.09);border-radius:10px;overflow:hidden">
+                  <div style="padding:13px 15px 11px;border-bottom:1px solid rgba(0,0,0,.07);border-left:3px solid #1D9E75">
+                    <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#0F6E56;margin-bottom:3px">Distribuidor</div>
+                    <div style="font-size:13px;font-weight:600;color:#111827;line-height:1.3">Dist. Minorista / Ferretera / Bloquera / Transformador</div>
+                    <span style="display:inline-block;margin-top:6px;font-size:11px;padding:2px 9px;border-radius:99px;background:#E1F5EE;color:#085041">Identificador: RIF empresa</span>
+                  </div>
+                  <div style="padding:8px 15px 12px">
+                    <div style="font-size:11px;color:#6b7280;font-weight:500;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">11 documentos</div>
+                    <table style="width:100%;border-collapse:collapse">
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0;width:18px">1</td><td style="font-size:12px;color:#374151;padding:4px 0">Hoja de Consignaci&oacute;n</td><td style="text-align:right"><span style="font-size:10px;padding:1px 6px;border-radius:99px;background:#EFF6FF;color:#1D4ED8">generado</span></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">2</td><td style="font-size:12px;color:#374151;padding:4px 0">Carta de Solicitud</td><td style="text-align:right"><span style="font-size:10px;padding:1px 6px;border-radius:99px;background:#EFF6FF;color:#1D4ED8">generado</span></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">3</td><td style="font-size:12px;color:#374151;padding:4px 0">Acta Constitutiva / Reg. Mercantil</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">4</td><td style="font-size:12px;color:#374151;padding:4px 0">Declaraci&oacute;n ISLR / IVA</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">5</td><td style="font-size:12px;color:#374151;padding:4px 0">&Uacute;ltima Acta de Asamblea</td><td style="text-align:right"><span style="font-size:10px;padding:1px 6px;border-radius:99px;background:#FEF3C7;color:#92400E">si aplica</span></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">6</td><td style="font-size:12px;color:#374151;padding:4px 0">C&eacute;dula de Accionistas</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">7</td><td style="font-size:12px;color:#374151;padding:4px 0">RIF Empresa</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">8</td><td style="font-size:12px;color:#374151;padding:4px 0">RIF Accionistas</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">9</td><td style="font-size:12px;color:#374151;padding:4px 0">Registro Fotogr&aacute;fico</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">10</td><td style="font-size:12px;color:#374151;padding:4px 0">Referencias Comerciales (3)</td><td></td></tr>
+                      <tr><td style="font-size:11px;color:#9ca3af;padding:4px 0">11</td><td style="font-size:12px;color:#374151;padding:4px 0">Referencia Bancaria</td><td></td></tr>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- CONSTRUCTOR -->
+                <div style="background:#fff;border:1px solid rgba(0,0,0,.09);border-radius:10px;overflow:hidden">
+                  <div style="padding:13px 15px 11px;border-bottom:1px solid rgba(0,0,0,.07);border-left:3px solid #378ADD">
+                    <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#185FA5;margin-bottom:3px">Constructor</div>
+                    <div style="font-size:13px;font-weight:600;color:#111827;line-height:1.3">Empresa constructora con obra activa</div>
+                    <span style="display:inline-block;margin-top:6px;font-size:11px;padding:2px 9px;border-radius:99px;background:#E6F1FB;color:#0C447C">Identificador: RIF empresa</span>
+                  </div>
+                  <div style="padding:8px 15px 12px">
+                    <div style="font-size:11px;color:#6b7280;font-weight:500;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">13 documentos</div>
+                    <table style="width:100%;border-collapse:collapse">
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0;width:18px">1</td><td style="font-size:12px;color:#374151;padding:4px 0">Hoja de Consignaci&oacute;n</td><td style="text-align:right"><span style="font-size:10px;padding:1px 6px;border-radius:99px;background:#EFF6FF;color:#1D4ED8">generado</span></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">2</td><td style="font-size:12px;color:#374151;padding:4px 0">Carta de Solicitud</td><td style="text-align:right"><span style="font-size:10px;padding:1px 6px;border-radius:99px;background:#EFF6FF;color:#1D4ED8">generado</span></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">3</td><td style="font-size:12px;color:#374151;padding:4px 0">Acta Constitutiva / Reg. Mercantil</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">4</td><td style="font-size:12px;color:#374151;padding:4px 0">Declaraci&oacute;n ISLR / IVA</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">5</td><td style="font-size:12px;color:#374151;padding:4px 0">&Uacute;ltima Acta de Asamblea</td><td style="text-align:right"><span style="font-size:10px;padding:1px 6px;border-radius:99px;background:#FEF3C7;color:#92400E">si aplica</span></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">6</td><td style="font-size:12px;color:#374151;padding:4px 0">C&eacute;dula de Accionistas</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">7</td><td style="font-size:12px;color:#374151;padding:4px 0">RIF Empresa y Accionistas</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">8</td><td style="font-size:12px;color:#374151;padding:4px 0">Registro Fotogr&aacute;fico</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">9</td><td style="font-size:12px;color:#374151;padding:4px 0">Memoria Descriptiva</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">10</td><td style="font-size:12px;color:#374151;padding:4px 0">Contrato de Obra</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">11</td><td style="font-size:12px;color:#374151;padding:4px 0">Referencias Comerciales (3)</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">12</td><td style="font-size:12px;color:#374151;padding:4px 0">Referencia Bancaria</td><td></td></tr>
+                      <tr><td style="font-size:11px;color:#9ca3af;padding:4px 0">13</td><td style="font-size:12px;color:#374151;padding:4px 0">Acta de Pr&oacute;rroga</td><td style="text-align:right"><span style="font-size:10px;padding:1px 6px;border-radius:99px;background:#FEF3C7;color:#92400E">si aplica</span></td></tr>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- EMPRENDEDOR -->
+                <div style="background:#fff;border:1px solid rgba(0,0,0,.09);border-radius:10px;overflow:hidden">
+                  <div style="padding:13px 15px 11px;border-bottom:1px solid rgba(0,0,0,.07);border-left:3px solid #BA7517">
+                    <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#854F0B;margin-bottom:3px">Emprendedor</div>
+                    <div style="font-size:13px;font-weight:600;color:#111827;line-height:1.3">Emprendedor individual del sector cemento</div>
+                    <span style="display:inline-block;margin-top:6px;font-size:11px;padding:2px 9px;border-radius:99px;background:#FAEEDA;color:#633806">Identificador: C&eacute;dula + RIF</span>
+                  </div>
+                  <div style="padding:8px 15px 12px">
+                    <div style="font-size:11px;color:#6b7280;font-weight:500;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">9 documentos</div>
+                    <table style="width:100%;border-collapse:collapse">
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0;width:18px">1</td><td style="font-size:12px;color:#374151;padding:4px 0">Hoja de Consignaci&oacute;n</td><td style="text-align:right"><span style="font-size:10px;padding:1px 6px;border-radius:99px;background:#EFF6FF;color:#1D4ED8">generado</span></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">2</td><td style="font-size:12px;color:#374151;padding:4px 0">Carta de Solicitud</td><td style="text-align:right"><span style="font-size:10px;padding:1px 6px;border-radius:99px;background:#EFF6FF;color:#1D4ED8">generado</span></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">3</td><td style="font-size:12px;color:#374151;padding:4px 0">Registro de Emprendedor</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">4</td><td style="font-size:12px;color:#374151;padding:4px 0">C&eacute;dula de Identidad</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">5</td><td style="font-size:12px;color:#374151;padding:4px 0">RIF</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">6</td><td style="font-size:12px;color:#374151;padding:4px 0">Registro Fotogr&aacute;fico</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">7</td><td style="font-size:12px;color:#374151;padding:4px 0">Registro IVSS</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">8</td><td style="font-size:12px;color:#374151;padding:4px 0">Registro INCES</td><td></td></tr>
+                      <tr><td style="font-size:11px;color:#9ca3af;padding:4px 0">9</td><td style="font-size:12px;color:#374151;padding:4px 0">Registro FAOV</td><td></td></tr>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- ALCALDÍA -->
+                <div style="background:#fff;border:1px solid rgba(0,0,0,.09);border-radius:10px;overflow:hidden">
+                  <div style="padding:13px 15px 11px;border-bottom:1px solid rgba(0,0,0,.07);border-left:3px solid #7F77DD">
+                    <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#534AB7;margin-bottom:3px">Alcald&iacute;a / Gobernaci&oacute;n</div>
+                    <div style="font-size:13px;font-weight:600;color:#111827;line-height:1.3">Ente gubernamental municipal o regional</div>
+                    <span style="display:inline-block;margin-top:6px;font-size:11px;padding:2px 9px;border-radius:99px;background:#EEEDFE;color:#3C3489">Identificador: RIF institucional</span>
+                  </div>
+                  <div style="padding:8px 15px 12px">
+                    <div style="font-size:11px;color:#6b7280;font-weight:500;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">7 documentos</div>
+                    <table style="width:100%;border-collapse:collapse">
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0;width:18px">1</td><td style="font-size:12px;color:#374151;padding:4px 0">Hoja de Consignaci&oacute;n</td><td style="text-align:right"><span style="font-size:10px;padding:1px 6px;border-radius:99px;background:#EFF6FF;color:#1D4ED8">generado</span></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">2</td><td style="font-size:12px;color:#374151;padding:4px 0">Carta de Solicitud</td><td style="text-align:right"><span style="font-size:10px;padding:1px 6px;border-radius:99px;background:#EFF6FF;color:#1D4ED8">generado</span></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">3</td><td style="font-size:12px;color:#374151;padding:4px 0">Gaceta Oficial</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">4</td><td style="font-size:12px;color:#374151;padding:4px 0">Nombramiento de Autoridad</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">5</td><td style="font-size:12px;color:#374151;padding:4px 0">C&eacute;dula de la Autoridad</td><td></td></tr>
+                      <tr style="border-bottom:1px solid rgba(0,0,0,.05)"><td style="font-size:11px;color:#9ca3af;padding:4px 0">6</td><td style="font-size:12px;color:#374151;padding:4px 0">RIF Institucional</td><td></td></tr>
+                      <tr><td style="font-size:11px;color:#9ca3af;padding:4px 0">7</td><td style="font-size:12px;color:#374151;padding:4px 0">Carnet de la Patria</td><td style="text-align:right"><span style="font-size:10px;padding:1px 6px;border-radius:99px;background:#FEF3C7;color:#92400E">si requerido</span></td></tr>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="inst-footer">
+              <img src="cintillo.png" alt="Ministerio del Poder Popular de Industrias - Corporaci&oacute;n Socialista del Cemento S.A.">
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div><!-- /screen-frame -->
   </div><!-- /frame-wrap -->
 
@@ -543,6 +671,12 @@ const SCREENS={
     {n:3,title:'Rechazar presencial',desc:'Cambia el estado a rejected_presencial. Requiere motivo. Distinto del rechazo documental del admin.',tag:'&rarr; rejected_presencial'},
     {n:4,title:'Permisos de acceso',desc:'Accesible para roles approver y superadmin. Los admins regulares no ven esta secci&oacute;n en el sidebar.',tag:'approver &middot; superadmin'},
   ]},
+  categorias:{route:'/admin/categorias',label:'document-matrix.ts',annotations:[
+    {n:1,title:'4 categorías de cliente',desc:'Distribuidor, Constructor, Emprendedor y Alcaldía/Gobernación. Cada una tiene su propia matriz documental y campos de formulario.',tag:'document-matrix.ts'},
+    {n:2,title:'Documentos generados',desc:'Hoja de Consignación y Carta de Solicitud se generan automáticamente en el paso 2 del onboarding. Actualmente son .txt — pendiente migrar a PDF.',tag:'pendiente PDF',warn:true},
+    {n:3,title:'Documentos condicionales',desc:'Acta de Asamblea (Distribuidor/Constructor) y Carnet de la Patria (Alcaldía) son opcionales. Acta de Prórroga aplica solo para Constructor.',tag:'conditional:true'},
+    {n:4,title:'Identificador por categoría',desc:'Distribuidor y Constructor usan RIF empresa. Emprendedor usa Cédula + RIF. Alcaldía usa RIF institucional. Clave para búsqueda en ApproverPanel.',tag:'form_data → rif'},
+  ]},
   sedes:{route:'/admin/sedes',label:'SedeManagement.tsx',annotations:[
     {n:1,title:'CRUD de sedes',desc:'Crear, editar y eliminar sedes. Solo visible para superadmin. Los admins regulares no tienen acceso a esta ruta.',tag:'solo superadmin'},
     {n:2,title:'Asignaci&oacute;n de aprobadores',desc:'Cada sede tiene uno o m&aacute;s aprobadores. El aprobador presencial solo ve usuarios de su sede asignada.',tag:'sede &rarr; aprobador &rarr; usuario'},
@@ -554,7 +688,7 @@ function goScreen(name){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.screen-pill').forEach(p=>p.classList.remove('active'));
   document.getElementById('s-'+name).classList.add('active');
-  const idx=['dashboard','review','approver','sedes'].indexOf(name);
+  const idx=['dashboard','review','approver','sedes','categorias'].indexOf(name);
   document.querySelectorAll('.screen-pill')[idx].classList.add('active');
   const meta=SCREENS[name];
   document.getElementById('current-route').textContent=meta.route;
