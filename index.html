@@ -40,6 +40,38 @@ body{font-family:Tahoma,'Trebuchet MS',sans-serif;background:var(--chrome-bg);mi
 .ann-desc{font-size:11px;color:#6b7280;line-height:1.6}
 .ann-tag{display:inline-block;margin-top:5px;font-size:10px;font-family:'Courier New',Courier,monospace;background:rgba(204,29,33,.12);color:#7ba3ff;padding:2px 7px;border-radius:4px}
 .ann-tag.warn{background:rgba(245,158,11,.1);color:#f59e0b}
+.ob-overlay{position:absolute;inset:0;background:rgba(0,0,0,.35);z-index:200;opacity:0;pointer-events:none;transition:opacity .2s;border-radius:10px}
+.ob-overlay.open{opacity:1;pointer-events:all}
+.ob-panel{position:absolute;top:0;right:0;width:380px;height:100%;background:#fff;z-index:201;transform:translateX(100%);transition:transform .22s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column;border-left:1px solid rgba(0,0,0,.1)}
+.ob-panel.open{transform:translateX(0)}
+.ob-panel-head{padding:14px 16px 12px;border-bottom:1px solid rgba(0,0,0,.08);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ob-panel-title{font-size:13px;font-weight:600;color:#111827}
+.ob-panel-sub{font-size:11px;color:#6b7280;margin-top:2px}
+.ob-close{width:26px;height:26px;border-radius:6px;border:1px solid rgba(0,0,0,.1);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:14px;line-height:1}
+.ob-close:hover{background:#f3f4f6}
+.ob-tabs{display:flex;gap:2px;padding:10px 12px 0;border-bottom:1px solid rgba(0,0,0,.08);flex-shrink:0}
+.ob-tab{font-size:11px;font-weight:500;padding:6px 12px;border-radius:6px 6px 0 0;cursor:pointer;color:#6b7280;border:none;background:transparent;font-family:Tahoma,"Trebuchet MS",sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px}
+.ob-tab.active{color:#CC1D21;border-bottom-color:#CC1D21;background:#fdf2f2}
+.ob-body{flex:1;padding:14px 16px;overflow-y:auto}
+.ob-step{display:flex;gap:10px;margin-bottom:14px;align-items:flex-start}
+.ob-step-num{width:22px;height:22px;border-radius:50%;background:#CC1D21;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.ob-step-info{}
+.ob-step-title{font-size:12px;font-weight:600;color:#111827}
+.ob-step-desc{font-size:11px;color:#6b7280;margin-top:2px;line-height:1.5}
+.ob-field{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.05)}
+.ob-field:last-child{border-bottom:none}
+.ob-field-label{font-size:12px;color:#374151}
+.ob-field-type{font-size:10px;color:#9ca3af;font-family:"Courier New",monospace}
+.ob-doc-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.05)}
+.ob-doc-row:last-child{border-bottom:none}
+.ob-doc-num{font-size:11px;color:#9ca3af;min-width:16px}
+.ob-doc-name{font-size:12px;color:#374151;flex:1}
+.ob-badge{font-size:10px;padding:1px 6px;border-radius:99px;white-space:nowrap}
+.ob-badge-gen{background:#EFF6FF;color:#1D4ED8}
+.ob-badge-cond{background:#FEF3C7;color:#92400E}
+.ob-sub-section{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9ca3af;margin:12px 0 6px}
+.cat-btn{display:block;width:100%;margin-top:8px;padding:5px 0;font-size:11px;font-weight:500;color:#CC1D21;background:rgba(204,29,33,.06);border:1px solid rgba(204,29,33,.2);border-radius:6px;cursor:pointer;font-family:Tahoma,"Trebuchet MS",sans-serif;transition:background .15s}
+.cat-btn:hover{background:rgba(204,29,33,.12)}
 /* APP SHELL */
 .app{display:flex;min-height:680px;font-family:Tahoma,'Trebuchet MS',sans-serif}
 .sidebar{width:200px;flex-shrink:0;background:#1a1d27;display:flex;flex-direction:column;min-height:680px}
@@ -534,6 +566,7 @@ tbody tr:hover{background:#f8f9fb}
                     <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#0F6E56;margin-bottom:3px">Distribuidor</div>
                     <div style="font-size:13px;font-weight:600;color:#111827;line-height:1.3">Dist. Minorista / Ferretera / Bloquera / Transformador</div>
                     <span style="display:inline-block;margin-top:6px;font-size:11px;padding:2px 9px;border-radius:99px;background:#E1F5EE;color:#085041">Identificador: RIF empresa</span>
+                    <button class="cat-btn" onclick="openObPanel('distribuidor')">Ver onboarding &#8594;</button>
                   </div>
                   <div style="padding:8px 15px 12px">
                     <div style="font-size:11px;color:#6b7280;font-weight:500;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">11 documentos</div>
@@ -559,6 +592,7 @@ tbody tr:hover{background:#f8f9fb}
                     <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#185FA5;margin-bottom:3px">Constructor</div>
                     <div style="font-size:13px;font-weight:600;color:#111827;line-height:1.3">Empresa constructora con obra activa</div>
                     <span style="display:inline-block;margin-top:6px;font-size:11px;padding:2px 9px;border-radius:99px;background:#E6F1FB;color:#0C447C">Identificador: RIF empresa</span>
+                    <button class="cat-btn" onclick="openObPanel('constructor')">Ver onboarding &#8594;</button>
                   </div>
                   <div style="padding:8px 15px 12px">
                     <div style="font-size:11px;color:#6b7280;font-weight:500;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">13 documentos</div>
@@ -586,6 +620,7 @@ tbody tr:hover{background:#f8f9fb}
                     <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#854F0B;margin-bottom:3px">Emprendedor</div>
                     <div style="font-size:13px;font-weight:600;color:#111827;line-height:1.3">Emprendedor individual del sector cemento</div>
                     <span style="display:inline-block;margin-top:6px;font-size:11px;padding:2px 9px;border-radius:99px;background:#FAEEDA;color:#633806">Identificador: C&eacute;dula + RIF</span>
+                    <button class="cat-btn" onclick="openObPanel('emprendedor')">Ver onboarding &#8594;</button>
                   </div>
                   <div style="padding:8px 15px 12px">
                     <div style="font-size:11px;color:#6b7280;font-weight:500;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">9 documentos</div>
@@ -609,6 +644,7 @@ tbody tr:hover{background:#f8f9fb}
                     <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#534AB7;margin-bottom:3px">Alcald&iacute;a / Gobernaci&oacute;n</div>
                     <div style="font-size:13px;font-weight:600;color:#111827;line-height:1.3">Ente gubernamental municipal o regional</div>
                     <span style="display:inline-block;margin-top:6px;font-size:11px;padding:2px 9px;border-radius:99px;background:#EEEDFE;color:#3C3489">Identificador: RIF institucional</span>
+                    <button class="cat-btn" onclick="openObPanel('alcaldia')">Ver onboarding &#8594;</button>
                   </div>
                   <div style="padding:8px 15px 12px">
                     <div style="font-size:11px;color:#6b7280;font-weight:500;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">7 documentos</div>
@@ -633,6 +669,24 @@ tbody tr:hover{background:#f8f9fb}
         </div>
       </div>
 
+
+    <!-- ONBOARDING PANEL -->
+    <div class="ob-overlay" id="ob-overlay" onclick="closeObPanel()"></div>
+    <div class="ob-panel" id="ob-panel">
+      <div class="ob-panel-head">
+        <div>
+          <div class="ob-panel-title" id="ob-panel-title">Onboarding</div>
+          <div class="ob-panel-sub" id="ob-panel-sub">Vista previa del flujo</div>
+        </div>
+        <button class="ob-close" onclick="closeObPanel()">&#x2715;</button>
+      </div>
+      <div class="ob-tabs">
+        <button class="ob-tab active" onclick="switchObTab('flujo',this)">Flujo</button>
+        <button class="ob-tab" onclick="switchObTab('formulario',this)">Formulario</button>
+        <button class="ob-tab" onclick="switchObTab('documentos',this)">Documentos</button>
+      </div>
+      <div class="ob-body" id="ob-body"></div>
+    </div>
     </div><!-- /screen-frame -->
   </div><!-- /frame-wrap -->
 
@@ -683,6 +737,195 @@ const SCREENS={
     {n:3,title:'Pendiente',desc:'No hay pantalla de confirmaci&oacute;n antes de eliminar una sede. Tampoco hay historial de cambios de asignaci&oacute;n de aprobadores.',tag:'backlog',warn:true},
   ]},
 };
+
+
+const OB_DATA = {
+  distribuidor:{
+    title:'Distribuidor',
+    sub:'Dist. Minorista / Ferretería / Bloquera / Transformador',
+    color:'#1D9E75',
+    steps:[
+      {n:1,title:'Selección de subcategoría',desc:'El usuario elige entre: Distribuidor Minorista, Ferretería, Bloquera, Transformador o Concretos Premezclados. Se guarda en form_data.subcategoria_distribuidor.'},
+      {n:2,title:'Información general (Step 1)',desc:'Completa: Razón Social, RIF, Dirección Fiscal, Representante Legal, Teléfono y Correo Electrónico.'},
+      {n:3,title:'Documentación (Step 2)',desc:'Sube los 11 documentos requeridos. El sistema genera automáticamente la Hoja de Consignación y la Carta de Solicitud.'},
+      {n:4,title:'Confirmación (Step 3)',desc:'Acepta términos y declaración jurada. El perfil pasa a estado under_review.'},
+    ],
+    fields:[
+      {label:'Subcategoría distribuidor',type:'select'},
+      {label:'Razón Social',type:'text'},
+      {label:'RIF',type:'text'},
+      {label:'Dirección Fiscal',type:'textarea'},
+      {label:'Representante Legal',type:'text'},
+      {label:'Teléfono',type:'tel'},
+      {label:'Correo Electrónico',type:'email'},
+    ],
+    docs:[
+      {n:1,label:'Hoja de Consignación',badge:'gen'},
+      {n:2,label:'Carta de Solicitud',badge:'gen'},
+      {n:3,label:'Acta Constitutiva / Reg. Mercantil',badge:''},
+      {n:4,label:'Declaración ISLR / IVA',badge:''},
+      {n:5,label:'Última Acta de Asamblea',badge:'cond'},
+      {n:6,label:'Cédula de Accionistas',badge:''},
+      {n:7,label:'RIF Empresa',badge:''},
+      {n:8,label:'RIF Accionistas',badge:''},
+      {n:9,label:'Registro Fotográfico',badge:''},
+      {n:10,label:'Referencias Comerciales (3)',badge:''},
+      {n:11,label:'Referencia Bancaria',badge:''},
+    ]
+  },
+  constructor:{
+    title:'Constructor',
+    sub:'Empresa constructora con obra activa',
+    color:'#378ADD',
+    steps:[
+      {n:1,title:'Información general (Step 1)',desc:'Completa: Razón Social, RIF, Dirección Fiscal, Representante Legal, Teléfono, Correo, Nombre de Obra, Ubicación, Monto Estimado, Fechas de inicio y culminación.'},
+      {n:2,title:'Documentación (Step 2)',desc:'Sube los 13 documentos requeridos. La Hoja de Consignación y la Carta de Solicitud se generan automáticamente.'},
+      {n:3,title:'Confirmación (Step 3)',desc:'Acepta términos y declaración jurada. El perfil pasa a estado under_review.'},
+    ],
+    fields:[
+      {label:'Razón Social',type:'text'},
+      {label:'RIF',type:'text'},
+      {label:'Dirección Fiscal',type:'textarea'},
+      {label:'Representante Legal',type:'text'},
+      {label:'Teléfono',type:'tel'},
+      {label:'Correo Electrónico',type:'email'},
+      {label:'Nombre de la Obra',type:'text'},
+      {label:'Ubicación de la Obra',type:'text'},
+      {label:'Monto Estimado',type:'number'},
+      {label:'Fecha de Inicio',type:'date'},
+      {label:'Fecha de Culminación',type:'date'},
+    ],
+    docs:[
+      {n:1,label:'Hoja de Consignación',badge:'gen'},
+      {n:2,label:'Carta de Solicitud',badge:'gen'},
+      {n:3,label:'Acta Constitutiva / Reg. Mercantil',badge:''},
+      {n:4,label:'Declaración ISLR / IVA',badge:''},
+      {n:5,label:'Última Acta de Asamblea',badge:'cond'},
+      {n:6,label:'Cédula de Accionistas',badge:''},
+      {n:7,label:'RIF Empresa y Accionistas',badge:''},
+      {n:8,label:'Registro Fotográfico',badge:''},
+      {n:9,label:'Memoria Descriptiva',badge:''},
+      {n:10,label:'Contrato de Obra',badge:''},
+      {n:11,label:'Referencias Comerciales (3)',badge:''},
+      {n:12,label:'Referencia Bancaria',badge:''},
+      {n:13,label:'Acta de Prórroga',badge:'cond'},
+    ]
+  },
+  emprendedor:{
+    title:'Emprendedor',
+    sub:'Emprendedor individual del sector cemento',
+    color:'#BA7517',
+    steps:[
+      {n:1,title:'Información general (Step 1)',desc:'Completa: Nombre Completo, Cédula, RIF, Dirección, Teléfono, Correo y Actividad Económica.'},
+      {n:2,title:'Documentación (Step 2)',desc:'Sube los 9 documentos requeridos. El sistema genera la Hoja de Consignación y la Carta de Solicitud.'},
+      {n:3,title:'Confirmación (Step 3)',desc:'Acepta términos y declaración jurada. El perfil pasa a estado under_review.'},
+    ],
+    fields:[
+      {label:'Nombre Completo',type:'text'},
+      {label:'Número de Cédula',type:'text'},
+      {label:'RIF',type:'text'},
+      {label:'Dirección',type:'textarea'},
+      {label:'Teléfono',type:'tel'},
+      {label:'Correo Electrónico',type:'email'},
+      {label:'Actividad Económica',type:'text'},
+    ],
+    docs:[
+      {n:1,label:'Hoja de Consignación',badge:'gen'},
+      {n:2,label:'Carta de Solicitud',badge:'gen'},
+      {n:3,label:'Registro de Emprendedor',badge:''},
+      {n:4,label:'Cédula de Identidad',badge:''},
+      {n:5,label:'RIF',badge:''},
+      {n:6,label:'Registro Fotográfico',badge:''},
+      {n:7,label:'Registro IVSS',badge:''},
+      {n:8,label:'Registro INCES',badge:''},
+      {n:9,label:'Registro FAOV',badge:''},
+    ]
+  },
+  alcaldia:{
+    title:'Alcaldía / Gobernación',
+    sub:'Ente gubernamental municipal o regional',
+    color:'#7F77DD',
+    steps:[
+      {n:1,title:'Información general (Step 1)',desc:'Completa: Nombre del Ente, RIF Institucional, Estado, Municipio, Dirección Administrativa, Teléfono Institucional y Correo Institucional.'},
+      {n:2,title:'Documentación (Step 2)',desc:'Sube los 7 documentos requeridos. La Hoja de Consignación y la Carta de Solicitud se generan automáticamente.'},
+      {n:3,title:'Confirmación (Step 3)',desc:'Acepta términos y declaración jurada. El perfil pasa a estado under_review.'},
+    ],
+    fields:[
+      {label:'Nombre del Ente',type:'text'},
+      {label:'RIF Institucional',type:'text'},
+      {label:'Estado',type:'text'},
+      {label:'Municipio',type:'text'},
+      {label:'Dirección Administrativa',type:'textarea'},
+      {label:'Teléfono Institucional',type:'tel'},
+      {label:'Correo Institucional',type:'email'},
+    ],
+    docs:[
+      {n:1,label:'Hoja de Consignación',badge:'gen'},
+      {n:2,label:'Carta de Solicitud',badge:'gen'},
+      {n:3,label:'Gaceta Oficial',badge:''},
+      {n:4,label:'Nombramiento de Autoridad',badge:''},
+      {n:5,label:'Cédula de la Autoridad',badge:''},
+      {n:6,label:'RIF Institucional',badge:''},
+      {n:7,label:'Carnet de la Patria',badge:'cond'},
+    ]
+  }
+};
+
+let currentObCat = null;
+let currentObTab = 'flujo';
+
+function openObPanel(cat){
+  currentObCat = cat;
+  currentObTab = 'flujo';
+  const d = OB_DATA[cat];
+  document.getElementById('ob-panel-title').textContent = d.title;
+  document.getElementById('ob-panel-sub').textContent = d.sub;
+  document.querySelectorAll('.ob-tab').forEach((t,i)=>{t.classList.toggle('active',i===0)});
+  renderObBody('flujo');
+  document.getElementById('ob-overlay').classList.add('open');
+  document.getElementById('ob-panel').classList.add('open');
+}
+
+function closeObPanel(){
+  document.getElementById('ob-overlay').classList.remove('open');
+  document.getElementById('ob-panel').classList.remove('open');
+}
+
+function switchObTab(tab, el){
+  currentObTab = tab;
+  document.querySelectorAll('.ob-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderObBody(tab);
+}
+
+function renderObBody(tab){
+  const d = OB_DATA[currentObCat];
+  const body = document.getElementById('ob-body');
+  if(tab === 'flujo'){
+    body.innerHTML = '<div class="ob-sub-section">Pasos del onboarding</div>' +
+      d.steps.map(s=>`<div class="ob-step">
+        <div class="ob-step-num" style="background:${d.color}">${s.n}</div>
+        <div class="ob-step-info">
+          <div class="ob-step-title">${s.title}</div>
+          <div class="ob-step-desc">${s.desc}</div>
+        </div>
+      </div>`).join('');
+  } else if(tab === 'formulario'){
+    body.innerHTML = '<div class="ob-sub-section">Campos — Step 1</div>' +
+      d.fields.map(f=>`<div class="ob-field">
+        <span class="ob-field-label">${f.label}</span>
+        <span class="ob-field-type">${f.type}</span>
+      </div>`).join('');
+  } else if(tab === 'documentos'){
+    body.innerHTML = '<div class="ob-sub-section">Documentos — Step 2</div>' +
+      d.docs.map(doc=>`<div class="ob-doc-row">
+        <span class="ob-doc-num">${doc.n}</span>
+        <span class="ob-doc-name">${doc.label}</span>
+        ${doc.badge==='gen'?'<span class="ob-badge ob-badge-gen">generado</span>':''}
+        ${doc.badge==='cond'?'<span class="ob-badge ob-badge-cond">si aplica</span>':''}
+      </div>`).join('');
+  }
+}
 
 function goScreen(name){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
