@@ -278,11 +278,12 @@ tbody tr:hover{background:#f8f9fb}
     <button class="screen-pill" onclick="goScreen('approver')">Aprobador presencial</button>
     <button class="screen-pill" onclick="goScreen('sedes')">Gestión de sedes</button>
     <button class="screen-pill" onclick="goScreen('categorias')">Categorías de clientes</button>
+    <button class="screen-pill" onclick="goScreen('cliente')">Vista del cliente</button>
   </div>
   <div class="proto-info">
     <span class="proto-badge wip">WIP</span>
     <span class="proto-badge route" id="current-route">/admin</span>
-    <span class="proto-badge live">v2.3</span>
+    <span class="proto-badge live">v2.4</span>
   </div>
 </div>
 
@@ -687,6 +688,112 @@ tbody tr:hover{background:#f8f9fb}
       </div>
       <div class="ob-body" id="ob-body"></div>
     </div>
+
+      <!-- SCREEN: CLIENTE -->
+      <div id="s-cliente" class="screen">
+        <div class="app">
+          <nav class="sidebar">
+            <div class="sb-brand"><div class="sb-brand-name">CSC</div><div class="sb-brand-sub">Portal del Cliente</div></div>
+            <div class="sb-section">Mi cuenta</div>
+            <div class="sb-item active"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="9" y="1" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="1" y="9" width="6" height="6" rx="1.2" fill="currentColor"/><rect x="9" y="9" width="6" height="6" rx="1.2" fill="currentColor"/></svg>Dashboard</div>
+            <div class="sb-item"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.8" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-2.8 2.7-4.8 6-4.8s6 2 6 4.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Mi Perfil</div>
+            <div class="sb-footer"><div class="sb-user">luis@otronodo.com</div></div>
+          </nav>
+          <div class="main">
+            <div class="topbar">
+              <span class="topbar-title">Dashboard del Cliente</span>
+              <div class="topbar-sep"></div>
+              <span class="topbar-sub">status: approved_documentation</span>
+            </div>
+            <div class="content" style="padding:16px;display:flex;flex-direction:column;gap:14px">
+
+              <!-- Status card -->
+              <div style="background:#fff;border:1px solid rgba(0,0,0,.09);border-radius:10px;padding:16px">
+                <div style="display:flex;align-items:flex-start;gap:12px">
+                  <div style="width:40px;height:40px;border-radius:8px;background:#DCFCE7;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#16A34A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <div style="flex:1">
+                    <div style="font-size:14px;font-weight:600;color:#111827">Documentaci&oacute;n Aprobada</div>
+                    <div style="font-size:12px;color:#6b7280;margin-top:3px;line-height:1.5">Su documentaci&oacute;n ha sido aprobada. Ya es usuario verificado, pero para ser cliente con poder de compra debe completar el tr&aacute;mite presencial en sede.</div>
+                  </div>
+                </div>
+                <div style="margin-top:12px">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                    <span style="font-size:11px;color:#6b7280">Progreso general</span>
+                    <span style="font-size:11px;font-weight:500;color:#374151">80%</span>
+                  </div>
+                  <div style="height:6px;background:#f3f4f6;border-radius:99px;overflow:hidden">
+                    <div style="height:100%;width:80%;background:#16A34A;border-radius:99px"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Carpeta de presentación -->
+              <div style="background:#fff;border:1px solid rgba(0,0,0,.09);border-radius:10px;overflow:hidden">
+                <div style="padding:13px 16px 11px;border-bottom:1px solid rgba(0,0,0,.07)">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4.5A1.5 1.5 0 013.5 3h3l1.5 2H13a1.5 1.5 0 011.5 1.5v6A1.5 1.5 0 0113 14H3.5A1.5 1.5 0 012 12.5v-8z" stroke="#374151" stroke-width="1.2"/></svg>
+                    <span style="font-size:13px;font-weight:600;color:#111827">Carpeta de Presentaci&oacute;n</span>
+                  </div>
+                </div>
+                <div style="padding:14px 16px">
+                  <p style="font-size:12px;color:#6b7280;margin-bottom:12px;line-height:1.5">Descargue su carpeta con todos los documentos aprobados en el orden oficial. Imprima el contenido y pres&eacute;ntelo en la sede asignada.</p>
+                  <button style="height:36px;padding:0 16px;background:#CC1D21;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:500;font-family:Tahoma,'Trebuchet MS',sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:7px">
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3M3 13h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Descargar carpeta (ZIP)
+                  </button>
+                  <div style="margin-top:8px;font-size:11px;color:#9ca3af">&Uacute;ltima descarga: 07/04/2026 09:32</div>
+                </div>
+              </div>
+
+              <!-- Instrucciones visita presencial -->
+              <div style="background:#fff;border:1px solid rgba(0,0,0,.09);border-radius:10px;overflow:hidden">
+                <div style="padding:13px 16px 11px;border-bottom:1px solid rgba(0,0,0,.07)">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="#374151" stroke-width="1.2"/><path d="M5 8h6M5 5h6M5 11h3" stroke="#374151" stroke-width="1.2" stroke-linecap="round"/></svg>
+                    <span style="font-size:13px;font-weight:600;color:#111827">Instrucciones para la Visita Presencial</span>
+                  </div>
+                </div>
+                <div style="padding:14px 16px">
+                  <ol style="padding-left:18px;margin:0 0 14px;display:flex;flex-direction:column;gap:7px">
+                    <li style="font-size:12px;color:#374151;line-height:1.5">Carpeta marr&oacute;n tama&ntilde;o oficio con los documentos impresos en el orden del ZIP</li>
+                    <li style="font-size:12px;color:#374151;line-height:1.5">Numerar todas las hojas en el cuadrante superior derecho en tinta negra, excepto la Hoja de Consignaci&oacute;n</li>
+                    <li style="font-size:12px;color:#374151;line-height:1.5">Colocar separadores entre documentos identificados con el nombre del documento</li>
+                    <li style="font-size:12px;color:#374151;line-height:1.5">La Hoja de Consignaci&oacute;n va primera, sin numerar, firmada y sellada</li>
+                    <li style="font-size:12px;color:#374151;line-height:1.5">Documentos sujetos con gancho N&deg; 22 en el margen izquierdo interno</li>
+                    <li style="font-size:12px;color:#374151;line-height:1.5">Presentarse en la sede asignada con la carpeta y el RIF del representante legal</li>
+                  </ol>
+                  <!-- Sede asignada -->
+                  <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#F0FDF4;border:1px solid rgba(22,163,74,.2);border-radius:7px">
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6c0 3.5 4.5 8.5 4.5 8.5s4.5-5 4.5-8.5C12.5 3.5 10.5 1.5 8 1.5z" stroke="#16A34A" stroke-width="1.2"/><circle cx="8" cy="6" r="1.5" stroke="#16A34A" stroke-width="1.2"/></svg>
+                    <span style="font-size:12px;color:#374151"><strong>Sede asignada:</strong> Sede Caracas &mdash; Caracas</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mis documentos -->
+              <div style="background:#fff;border:1px solid rgba(0,0,0,.09);border-radius:10px;overflow:hidden">
+                <div style="padding:13px 16px 11px;border-bottom:1px solid rgba(0,0,0,.07)">
+                  <span style="font-size:13px;font-weight:600;color:#111827">Mis Documentos</span>
+                </div>
+                <div style="padding:8px 16px 12px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font-size:12px;color:#374151">Hoja de Consignaci&oacute;n</span><span style="font-size:10px;padding:2px 8px;border-radius:99px;background:#DCFCE7;color:#166534">Aprobado</span></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font-size:12px;color:#374151">Carta de Solicitud</span><span style="font-size:10px;padding:2px 8px;border-radius:99px;background:#DCFCE7;color:#166534">Aprobado</span></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font-size:12px;color:#374151">Acta Constitutiva / Reg. Mercantil</span><span style="font-size:10px;padding:2px 8px;border-radius:99px;background:#DCFCE7;color:#166534">Aprobado</span></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="font-size:12px;color:#374151">C&eacute;dula de Identidad de los Accionistas</span><span style="font-size:10px;padding:2px 8px;border-radius:99px;background:#DCFCE7;color:#166534">Aprobado</span></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0"><span style="font-size:12px;color:#374151">RIF Empresa</span><span style="font-size:10px;padding:2px 8px;border-radius:99px;background:#DCFCE7;color:#166534">Aprobado</span></div>
+                </div>
+              </div>
+
+            </div>
+            <div class="inst-footer">
+              <img src="cintillo.png" alt="Ministerio del Poder Popular de Industrias - Corporaci&oacute;n Socialista del Cemento S.A.">
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div><!-- /screen-frame -->
   </div><!-- /frame-wrap -->
 
@@ -720,16 +827,22 @@ const SCREENS={
     {n:5,title:'Pendientes de implementar',desc:'Rechazo global de solicitud, cambiar sede desde esta vista, editar datos del usuario y correo de aprobaci&oacute;n (dominio pendiente).',tag:'backlog',warn:true},
   ]},
   approver:{route:'/admin/approver',label:'ApproverPanel.tsx',annotations:[
-    {n:1,title:'Usuarios en espera',desc:'Solo muestra perfiles con estado approved_documentation. La documentaci&oacute;n ya fue validada por el admin.',tag:'approved_documentation'},
-    {n:2,title:'Activar cuenta',desc:'Cambia el estado a active_final. Desencadena notificaci&oacute;n al usuario (email pendiente de verificaci&oacute;n de dominio).',tag:'&rarr; active_final'},
-    {n:3,title:'Rechazar presencial',desc:'Cambia el estado a rejected_presencial. Requiere motivo. Distinto del rechazo documental del admin.',tag:'&rarr; rejected_presencial'},
-    {n:4,title:'Permisos de acceso',desc:'Accesible para roles approver y superadmin. Los admins regulares no ven esta secci&oacute;n en el sidebar.',tag:'approver &middot; superadmin'},
+    {n:1,title:'B&uacute;squeda por RIF',desc:'El panel ahora busca por email, nombre y RIF. El RIF se obtiene con un join a form_data usando .in(userIds) — una sola consulta.',tag:'form_data → rif'},
+    {n:2,title:'Columnas nuevas',desc:'La tabla muestra RIF y Subcategor&iacute;a (para Distribuidores). Ambos se extraen de formDataMap cargado en loadData.',tag:'getRif() · getSubcategoria()'},
+    {n:3,title:'RIF en di&aacute;logo de activaci&oacute;n',desc:'Al abrir el di&aacute;logo de activaci&oacute;n se muestra el RIF del cliente en font-mono para que el approver confirme visualmente la identidad.',tag:'identidad presencial'},
+    {n:4,title:'Activar y rechazar',desc:'Activar → active_final. Rechazar → rejected_presencial o under_review (devolver a revisi&oacute;n). Ambos requieren confirmaci&oacute;n.',tag:'approver &middot; superadmin'},
+  ]},
+  cliente:{route:'/dashboard',label:'Dashboard.tsx',annotations:[
+    {n:1,title:'Vista approved_documentation',desc:'Cuando el cliente tiene documentaci&oacute;n aprobada ve tres secciones: banner de estado (80% progreso), carpeta descargable y lista de instrucciones para la visita presencial.',tag:'approved_documentation'},
+    {n:2,title:'Descarga del ZIP',desc:'El bot&oacute;n llama a la Edge Function generate-client-folder. Genera un ZIP con todos los documentos aprobados en el orden oficial, lo sube al bucket y retorna una signed URL de 1 hora.',tag:'generate-client-folder'},
+    {n:3,title:'Instrucci&oacute;n de sede',desc:'Si el perfil tiene sede_id, se consulta la tabla sedes y se muestra nombre y estado. Si no hay sede asignada, se muestra aviso para contactar al admin.',tag:'sedes → nombre'},
+    {n:4,title:'&Uacute;ltima descarga',desc:'El campo last_folder_download_at en profiles se actualiza cada vez que se genera el ZIP. Se muestra en el dashboard como referencia al cliente.',tag:'last_folder_download_at'},
   ]},
   categorias:{route:'/admin/categorias',label:'document-matrix.ts',annotations:[
-    {n:1,title:'4 categorías de cliente',desc:'Distribuidor, Constructor, Emprendedor y Alcaldía/Gobernación. Cada una tiene su propia matriz documental y campos de formulario.',tag:'document-matrix.ts'},
-    {n:2,title:'Documentos generados',desc:'Hoja de Consignación y Carta de Solicitud se generan automáticamente en el paso 2 del onboarding. Actualmente son .txt — pendiente migrar a PDF.',tag:'pendiente PDF',warn:true},
-    {n:3,title:'Documentos condicionales',desc:'Acta de Asamblea (Distribuidor/Constructor) y Carnet de la Patria (Alcaldía) son opcionales. Acta de Prórroga aplica solo para Constructor.',tag:'conditional:true'},
-    {n:4,title:'Identificador por categoría',desc:'Distribuidor y Constructor usan RIF empresa. Emprendedor usa Cédula + RIF. Alcaldía usa RIF institucional. Clave para búsqueda en ApproverPanel.',tag:'form_data → rif'},
+    {n:1,title:'Subcategor&iacute;as Distribuidor',desc:'Al seleccionar Distribuidor el cliente elige entre 5 tipos: Minorista, Ferretera, Bloquera, Transformador, Concretos Premezclados. Se guarda en form_data.subcategoria_distribuidor.',tag:'CategorySelection.tsx'},
+    {n:2,title:'Documentos en PDF',desc:'Hoja de Consignaci&oacute;n y Carta de Solicitud se generan como PDF profesional con jsPDF + fuente Roboto embebida. Datos pre-rellenados desde form_data y profiles.',tag:'generate-hoja-consignacion.ts'},
+    {n:3,title:'Orden oficial',desc:'La matriz refleja el orden exacto del Manual de Cliente V15. Constructor tiene acta_prorroga en posici&oacute;n 11, antes de referencias. Labels con texto oficial completo.',tag:'manual v15 junio 2025'},
+    {n:4,title:'RIF en todas las categor&iacute;as',desc:'Distribuidor y Constructor: rif en form_data. Emprendedor: c&eacute;dula + rif. Alcald&iacute;a: rif_institucional. Todos disponibles para b&uacute;squeda en ApproverPanel.',tag:'form_data → rif'},
   ]},
   sedes:{route:'/admin/sedes',label:'SedeManagement.tsx',annotations:[
     {n:1,title:'CRUD de sedes',desc:'Crear, editar y eliminar sedes. Solo visible para superadmin. Los admins regulares no tienen acceso a esta ruta.',tag:'solo superadmin'},
@@ -931,7 +1044,7 @@ function goScreen(name){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.screen-pill').forEach(p=>p.classList.remove('active'));
   document.getElementById('s-'+name).classList.add('active');
-  const idx=['dashboard','review','approver','sedes','categorias'].indexOf(name);
+  const idx=['dashboard','review','approver','sedes','categorias','cliente'].indexOf(name);
   document.querySelectorAll('.screen-pill')[idx].classList.add('active');
   const meta=SCREENS[name];
   document.getElementById('current-route').textContent=meta.route;
